@@ -7,7 +7,7 @@ import { writeFileSync } from "node:fs"
 import { join } from "node:path"
 
 // Australia bounding box
-const BBOX = { west: 110, east: 155, south: -45, north: -10 }
+const BBOX = { west: 105, east: 160, south: -48, north: -5 }
 const LON_STEPS = 20
 const LAT_STEPS = 15
 

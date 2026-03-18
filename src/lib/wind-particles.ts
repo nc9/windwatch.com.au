@@ -71,13 +71,16 @@ export class WindParticleRenderer {
 	constructor(map: any) {
 		this.map = map
 
+		// Clean up any orphaned canvases from HMR
+		const container = map.getCanvas().parentElement
+		container?.querySelectorAll("[data-wind-layer]").forEach((el: Element) => el.remove())
+
 		this.canvas = document.createElement("canvas")
+		this.canvas.dataset.windLayer = "particles"
 		this.canvas.style.cssText =
 			"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;"
 		this.ctx = this.canvas.getContext("2d")!
-
-		const mapCanvas = map.getCanvas()
-		mapCanvas.parentElement?.appendChild(this.canvas)
+		container?.appendChild(this.canvas)
 
 		this.resize()
 		map.on("resize", () => this.resize())
@@ -124,6 +127,7 @@ export class WindParticleRenderer {
 		// Create a separate canvas for the heatmap, inserted BEFORE the particle canvas
 		if (!this.heatmapCanvas) {
 			this.heatmapCanvas = document.createElement("canvas")
+			this.heatmapCanvas.dataset.windLayer = "heatmap"
 			this.heatmapCanvas.style.cssText =
 				"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;"
 			this.canvas.parentElement?.insertBefore(this.heatmapCanvas, this.canvas)
@@ -174,7 +178,7 @@ export class WindParticleRenderer {
 		// Scale up with smoothing
 		hctx.imageSmoothingEnabled = true
 		hctx.imageSmoothingQuality = "high"
-		hctx.globalAlpha = 0.4
+		hctx.globalAlpha = 0.6
 		hctx.drawImage(offscreen, 0, 0, cw, ch)
 
 		hctx.globalAlpha = 1

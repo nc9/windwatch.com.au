@@ -10,8 +10,8 @@ import { capacityFactorColor } from "../lib/colors"
 // Fix MapLibre worker for Vite — use CSP worker with ?url import
 maplibregl.workerUrl = maplibreWorkerUrl
 
-const AUSTRALIA_CENTER: [number, number] = [134, -28]
-const AUSTRALIA_ZOOM = 4.2
+const AUSTRALIA_CENTER: [number, number] = [134, -27]
+const AUSTRALIA_ZOOM = 4.5
 
 type Props = {
 	facilities: WindFacilityData | null
@@ -48,6 +48,7 @@ export function WindMap({ facilities, windData }: Props) {
 			zoom: AUSTRALIA_ZOOM,
 			minZoom: 3,
 			maxZoom: 12,
+			maxBounds: [[108, -47], [157, -8]],
 		})
 
 		map.addControl(new maplibregl.NavigationControl(), "bottom-right")
