@@ -22,23 +22,21 @@ type Particle = {
 	trail: Array<{ x: number; y: number; speed: number }>
 }
 
-// Windy.com-style color scale: dark blue → blue → cyan → green → yellow → orange → purple
+// Wind color scale: deep purple → dark blue → light blue → cyan → green → yellow → red
 const SPEED_COLORS = [
-	[15, 30, 80],     // 0 m/s — deep navy
-	[30, 55, 130],    // 2 m/s — dark blue
-	[25, 90, 165],    // 4 m/s — blue
-	[30, 130, 180],   // 6 m/s — blue-cyan
-	[40, 170, 170],   // 8 m/s — teal
-	[60, 190, 130],   // 10 m/s — teal-green
-	[100, 205, 80],   // 12 m/s — green
-	[160, 215, 50],   // 14 m/s — yellow-green
-	[210, 210, 40],   // 16 m/s — yellow
-	[240, 180, 30],   // 18 m/s — yellow-orange
-	[245, 130, 20],   // 20 m/s — orange
-	[240, 80, 20],    // 22 m/s — dark orange
-	[200, 40, 80],    // 24 m/s — red-magenta
-	[160, 30, 130],   // 26 m/s — purple
-	[120, 20, 160],   // 28+ m/s — deep purple (extreme)
+	[60, 20, 120],    // 0 m/s — deep purple (still)
+	[70, 40, 160],    // 1 m/s — purple
+	[60, 70, 200],    // 3 m/s — dark blue
+	[80, 130, 240],   // 5 m/s — blue
+	[100, 160, 255],  // 7 m/s — light blue
+	[60, 210, 230],   // 9 m/s — cyan
+	[60, 220, 180],   // 11 m/s — teal
+	[80, 230, 120],   // 13 m/s — green
+	[160, 240, 60],   // 16 m/s — lime
+	[240, 240, 50],   // 19 m/s — yellow
+	[255, 180, 40],   // 22 m/s — orange
+	[255, 90, 50],    // 26 m/s — red
+	[255, 60, 180],   // 30+ m/s — hot pink (extreme)
 ]
 
 function speedColor(speed: number): string {
@@ -61,10 +59,11 @@ export class WindParticleRenderer {
 	private windImage: ImageData | null = null
 	private particles: Particle[] = []
 	private animId: number | null = null
-	private readonly particleCount = 4000
+	private readonly baseParticleCount = 4000
+	private readonly baseZoom = 4.5
 	private readonly trailLength = 30
 	private readonly speedFactor = 0.002
-	private heatmapCanvas: HTMLCanvasElement | null = null
+	private heatmapSourceAdded = false
 	private lastFrameTime = 0
 	private readonly frameInterval = 50 // ~20fps
 
@@ -117,85 +116,147 @@ export class WindParticleRenderer {
 		this.windImage = cx.getImageData(0, 0, data.width, data.height)
 
 		this.particles = []
-		for (let i = 0; i < this.particleCount; i++) {
+		for (let i = 0; i < this.targetParticleCount(); i++) {
 			this.particles.push(this.randomParticle())
 		}
 
-		// Build heatmap
-		this.buildHeatmap()
-		this.map.on("move", () => this.drawHeatmap())
-		this.map.on("zoom", () => this.drawHeatmap())
+		// Build heatmap as MapLibre layer (renders between terrain and labels)
+		// Must wait for style to be fully loaded before adding sources/layers
+		if (this.map.isStyleLoaded()) {
+			this.buildHeatmap()
+		} else {
+			this.map.once("style.load", () => this.buildHeatmap())
+		}
+		this.map.on("moveend", () => this.updateHeatmap())
+		this.map.on("zoomend", () => this.updateHeatmap())
 	}
 
-	/** Pre-render a wind speed heatmap canvas from the grid data */
+	/** Render heatmap to offscreen canvas, add as MapLibre image source between terrain and labels */
 	private buildHeatmap() {
 		if (!this.windData || !this.windImage) return
 
-		// Create a separate canvas for the heatmap, inserted BEFORE the particle canvas
-		if (!this.heatmapCanvas) {
-			this.heatmapCanvas = document.createElement("canvas")
-			this.heatmapCanvas.dataset.windLayer = "heatmap"
-			this.heatmapCanvas.style.cssText =
-				"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;"
-			this.canvas.parentElement?.insertBefore(this.heatmapCanvas, this.canvas)
+		const dataUrl = this.renderHeatmapImage()
+		const [west, south, east, north] = this.windData.bbox
+		const coords: [[number, number], [number, number], [number, number], [number, number]] = [
+			[west, north],
+			[east, north],
+			[east, south],
+			[west, south],
+		]
+
+		// Clean up existing source/layer from HMR
+		try {
+			if (this.map.getLayer("wind-heatmap")) this.map.removeLayer("wind-heatmap")
+			if (this.map.getSource("wind-heatmap")) this.map.removeSource("wind-heatmap")
+		} catch (_) {}
+
+		// Insert heatmap below labels but above everything else
+		const layers = this.map.getStyle().layers
+		let insertBefore: string | undefined
+		for (const layer of layers) {
+			if (layer.type === "symbol") {
+				insertBefore = layer.id
+				break
+			}
 		}
 
-		this.drawHeatmap()
+		this.map.addSource("wind-heatmap", {
+			type: "image",
+			url: dataUrl,
+			coordinates: coords,
+		})
+
+		this.map.addLayer(
+			{
+				id: "wind-heatmap",
+				type: "raster",
+				source: "wind-heatmap",
+				paint: { "raster-opacity": 0.5, "raster-fade-duration": 0 },
+			},
+			insertBefore,
+		)
+
+		this.heatmapSourceAdded = true
 	}
 
-	private drawHeatmap() {
-		if (!this.heatmapCanvas || !this.windData || !this.windImage) return
+	private updateHeatmap() {
+		if (!this.heatmapSourceAdded || !this.windData || !this.windImage) return
+		const source = this.map.getSource("wind-heatmap") as any
+		if (!source) return
 
-		const hc = this.heatmapCanvas
-		const el = this.map.getCanvas()
-		const cw = el.clientWidth
-		const ch = el.clientHeight
-		hc.width = cw
-		hc.height = ch
-		const hctx = hc.getContext("2d")!
+		const dataUrl = this.renderHeatmapImage()
+		const [west, south, east, north] = this.windData.bbox
+		source.updateImage({
+			url: dataUrl,
+			coordinates: [
+				[west, north],
+				[east, north],
+				[east, south],
+				[west, south],
+			],
+		})
+	}
 
-		hctx.clearRect(0, 0, cw, ch)
-
-		const { bbox, width, height, uMin, uMax, vMin, vMax } = this.windData
+	/** Render wind speed grid to an offscreen canvas, return data URL */
+	private renderHeatmapImage(): string {
+		const wd = this.windData!
+		const wi = this.windImage!
+		const { bbox, width, height, uMin, uMax, vMin, vMax } = wd
 		const [west, south, east, north] = bbox
 
-		// Render wind speed heatmap — draw to a small offscreen canvas then scale up (smooth)
-		const gridW = 120
-		const gridH = Math.round(gridW * (ch / cw))
+		// Render at wind grid resolution for max detail
+		const gridW = width
+		const gridH = height
 		const offscreen = document.createElement("canvas")
 		offscreen.width = gridW
 		offscreen.height = gridH
 		const octx = offscreen.getContext("2d")!
+		const imgData = octx.createImageData(gridW, gridH)
+		const data = imgData.data
 
 		for (let gy = 0; gy < gridH; gy++) {
 			for (let gx = 0; gx < gridW; gx++) {
-				const sx = (gx / gridW) * cw
-				const sy = (gy / gridH) * ch
-				const lngLat = this.map.unproject([sx, sy])
+				const i = (gy * gridW + gx) * 4
+				const wi_i = (gy * width + gx) * 4
+				const u = uMin + (wi.data[wi_i] / 255) * (uMax - uMin)
+				const v = vMin + (wi.data[wi_i + 1] / 255) * (vMax - vMin)
+				const speed = Math.sqrt(u * u + v * v)
 
-				if (lngLat.lng < west || lngLat.lng > east || lngLat.lat < south || lngLat.lat > north) continue
+				const t = Math.min(speed / 30, 1) * (SPEED_COLORS.length - 1)
+				const ci = Math.floor(t)
+				const f = t - ci
+				const a = SPEED_COLORS[Math.min(ci, SPEED_COLORS.length - 1)]
+				const b = SPEED_COLORS[Math.min(ci + 1, SPEED_COLORS.length - 1)]
 
-				const wind = this.getWind(lngLat.lng, lngLat.lat)
-				if (!wind) continue
-
-				const speed = Math.sqrt(wind[0] * wind[0] + wind[1] * wind[1])
-				octx.fillStyle = speedColor(speed)
-				octx.fillRect(gx, gy, 1, 1)
+				data[i] = Math.round(a[0] + (b[0] - a[0]) * f)
+				data[i + 1] = Math.round(a[1] + (b[1] - a[1]) * f)
+				data[i + 2] = Math.round(a[2] + (b[2] - a[2]) * f)
+				data[i + 3] = 255
 			}
 		}
 
-		// Scale up with smoothing
-		hctx.imageSmoothingEnabled = true
-		hctx.imageSmoothingQuality = "high"
-		hctx.globalAlpha = 0.25
-		hctx.drawImage(offscreen, 0, 0, cw, ch)
+		octx.putImageData(imgData, 0, 0)
+		return offscreen.toDataURL()
+	}
 
-		hctx.globalAlpha = 1
+	/** Scale particle count — fewer when zoomed in since they're packed into smaller area */
+	private targetParticleCount(): number {
+		const zoom = this.map.getZoom()
+		const scale = Math.pow(2, this.baseZoom - zoom)
+		return Math.max(200, Math.round(this.baseParticleCount * Math.min(1, scale)))
 	}
 
 	private randomParticle(): Particle {
 		if (!this.windData) return { lng: 134, lat: -28, age: 0, maxAge: 60, trail: [] }
-		const [west, south, east, north] = this.windData.bbox
+		const [bboxW, bboxS, bboxE, bboxN] = this.windData.bbox
+
+		// Spawn within visible viewport, clamped to wind data bbox
+		const bounds = this.map.getBounds()
+		const west = Math.max(bounds.getWest(), bboxW)
+		const east = Math.min(bounds.getEast(), bboxE)
+		const south = Math.max(bounds.getSouth(), bboxS)
+		const north = Math.min(bounds.getNorth(), bboxN)
+
 		return {
 			lng: west + Math.random() * (east - west),
 			lat: south + Math.random() * (north - south),
@@ -259,6 +320,11 @@ export class WindParticleRenderer {
 		const h = this.canvas.height
 		const bbox = this.windData.bbox
 
+		// Adjust particle count for current zoom
+		const target = this.targetParticleCount()
+		while (this.particles.length > target) this.particles.pop()
+		while (this.particles.length < target) this.particles.push(this.randomParticle())
+
 		// Clear entire canvas each frame — we redraw all trails
 		ctx.clearRect(0, 0, w, h)
 
@@ -273,10 +339,12 @@ export class WindParticleRenderer {
 			const [u, v] = wind
 			const speed = Math.sqrt(u * u + v * v)
 
-			// Move in geographic space with latitude correction
+			// Move in geographic space — scale down at higher zoom so particles don't fly
+			const zoom = this.map.getZoom()
+			const zoomScale = this.speedFactor * Math.pow(2, 4.5 - zoom)
 			const distortion = Math.cos((p.lat * Math.PI) / 180)
-			p.lng += (u * this.speedFactor) / Math.max(distortion, 0.1)
-			p.lat += v * this.speedFactor
+			p.lng += (u * zoomScale) / Math.max(distortion, 0.1)
+			p.lat += v * zoomScale
 			p.age++
 
 			// Project to screen and add to trail
@@ -340,6 +408,12 @@ export class WindParticleRenderer {
 	destroy() {
 		this.stop()
 		this.canvas.remove()
-		this.heatmapCanvas?.remove()
+		if (this.heatmapSourceAdded) {
+			try {
+				this.map.removeLayer("wind-heatmap")
+				this.map.removeSource("wind-heatmap")
+			} catch (_) {}
+			this.heatmapSourceAdded = false
+		}
 	}
 }
