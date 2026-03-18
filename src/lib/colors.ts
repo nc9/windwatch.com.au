@@ -4,8 +4,7 @@
  */
 
 const CF_STOPS: Array<[number, [number, number, number]]> = [
-	[0, [239, 68, 68]],     // red — offline
-	[3, [255, 255, 255]],   // white — barely running
+	[0, [255, 255, 255]],   // white — off/barely running
 	[10, [190, 242, 100]],  // lime — generating
 	[20, [74, 222, 128]],   // green — decent
 	[30, [22, 163, 74]],    // green — good
@@ -41,8 +40,7 @@ export function capacityFactorExpression(): unknown[] {
 		"interpolate",
 		["linear"],
 		["get", "capacityFactor"],
-		0, "#ef4444",
-		3, "#ffffff",
+		0, "#ffffff",
 		10, "#bef264",
 		20, "#4ade80",
 		30, "#16a34a",
