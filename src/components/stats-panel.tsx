@@ -1,7 +1,7 @@
-import type { WindFacilityData } from "../lib/types"
 import { formatMW, formatPercent } from "../lib/format"
+import type { WindFacilityData } from "../lib/types"
 
-type Props = {
+interface Props {
 	data: WindFacilityData | null
 	error?: string | null
 }
@@ -18,14 +18,17 @@ export function StatsPanel({ data, error }: Props) {
 
 			{error ? (
 				<div className="text-sm text-red-400">{error}</div>
-			) : data ? (
+			) : (data ? (
 				<div className="space-y-2 text-sm">
 					<StatRow
 						label="Total Generation"
 						value={formatMW(data.totalPower)}
 						highlight
 					/>
-					<StatRow label="Total Capacity" value={formatMW(data.totalCapacity)} />
+					<StatRow
+						label="Total Capacity"
+						value={formatMW(data.totalCapacity)}
+					/>
 					<StatRow
 						label="Capacity Factor"
 						value={formatPercent(data.aggregateCapacityFactor)}
@@ -43,7 +46,7 @@ export function StatsPanel({ data, error }: Props) {
 				</div>
 			) : (
 				<div className="text-sm text-neutral-500">Loading wind data...</div>
-			)}
+			))}
 		</div>
 	)
 }
@@ -52,7 +55,11 @@ function StatRow({
 	label,
 	value,
 	highlight,
-}: { label: string; value: string; highlight?: boolean }) {
+}: {
+	label: string
+	value: string
+	highlight?: boolean
+}) {
 	return (
 		<div className="flex items-center justify-between">
 			<span className="text-neutral-400">{label}</span>

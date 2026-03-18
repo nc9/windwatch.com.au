@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query"
+
+import { Legend } from "./components/legend"
+import { StatsPanel } from "./components/stats-panel"
+import { WindMap } from "./components/wind-map"
 import type { WindFacilityData } from "./lib/types"
 import type { WindData } from "./lib/wind-particles"
-import { WindMap } from "./components/wind-map"
-import { StatsPanel } from "./components/stats-panel"
-import { Legend } from "./components/legend"
 
 const FACILITIES_URL =
 	import.meta.env.VITE_FACILITIES_URL || "/data/facilities.json"
@@ -15,13 +16,13 @@ const fetchJSON = (url: string) =>
 
 export function App() {
 	const facilities = useQuery<WindFacilityData>({
-		queryKey: ["facilities"],
 		queryFn: () => fetchJSON(FACILITIES_URL),
+		queryKey: ["facilities"],
 	})
 
 	const wind = useQuery<WindData>({
-		queryKey: ["wind"],
 		queryFn: () => fetchJSON(WIND_URL),
+		queryKey: ["wind"],
 		refetchInterval: 6 * 60 * 60 * 1000,
 	})
 

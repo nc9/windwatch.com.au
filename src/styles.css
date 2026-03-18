@@ -11,7 +11,10 @@ body,
 	overflow: hidden;
 	background: #0a0a0a;
 	color: #e5e5e5;
-	font-family: system-ui, -apple-system, sans-serif;
+	font-family:
+		system-ui,
+		-apple-system,
+		sans-serif;
 }
 
 /* Popups above wind canvases */

@@ -7,7 +7,7 @@ import { writeFileSync } from "node:fs"
 import { join } from "node:path"
 
 // Australia bounding box
-const BBOX = { west: 105, east: 160, south: -48, north: -5 }
+const BBOX = { east: 160, north: -5, south: -48, west: 105 }
 const LON_STEPS = 20
 const LAT_STEPS = 15
 
@@ -18,15 +18,18 @@ async function main() {
 	for (let i = 0; i < LAT_STEPS; i++) {
 		lats.push(
 			Number(
-				(BBOX.north + (i * (BBOX.south - BBOX.north)) / (LAT_STEPS - 1)).toFixed(2),
-			),
+				(
+					BBOX.north +
+					(i * (BBOX.south - BBOX.north)) / (LAT_STEPS - 1)
+				).toFixed(2)
+			)
 		)
 	}
 	for (let i = 0; i < LON_STEPS; i++) {
 		lngs.push(
 			Number(
-				(BBOX.west + (i * (BBOX.east - BBOX.west)) / (LON_STEPS - 1)).toFixed(2),
-			),
+				(BBOX.west + (i * (BBOX.east - BBOX.west)) / (LON_STEPS - 1)).toFixed(2)
+			)
 		)
 	}
 
@@ -56,13 +59,19 @@ async function main() {
 		url.searchParams.set("current", "wind_speed_10m,wind_direction_10m")
 
 		const res = await fetch(url.toString())
-		if (!res.ok) throw new Error(`Open-Meteo error: ${res.status}`)
+		if (!res.ok) {
+			throw new Error(`Open-Meteo error: ${res.status}`)
+		}
 		const json = await res.json()
 		const batch = Array.isArray(json) ? json : [json]
 		results.push(...batch)
-		process.stdout.write(`  batch ${Math.floor(i / BATCH) + 1}/${Math.ceil(allLats.length / BATCH)}\n`)
+		process.stdout.write(
+			`  batch ${Math.floor(i / BATCH) + 1}/${Math.ceil(allLats.length / BATCH)}\n`
+		)
 		// Rate limit
-		if (i + BATCH < allLats.length) await new Promise((r) => setTimeout(r, 1000))
+		if (i + BATCH < allLats.length) {
+			await new Promise((r) => setTimeout(r, 1000))
+		}
 	}
 
 	console.log(`Got ${results.length} wind readings`)
@@ -112,21 +121,23 @@ async function main() {
 	const base64 = pngBuffer.toString("base64")
 
 	const windData = {
-		image: `data:image/png;base64,${base64}`,
-		width,
-		height,
-		uMin,
-		uMax,
-		vMin,
-		vMax,
 		bbox: [BBOX.west, BBOX.south, BBOX.east, BBOX.north],
+		height,
+		image: `data:image/png;base64,${base64}`,
 		timestamp: new Date().toISOString(),
+		uMax,
+		uMin,
+		vMax,
+		vMin,
+		width,
 	}
 
 	const outPath = join(import.meta.dir, "../public/data/wind.json")
 	writeFileSync(outPath, JSON.stringify(windData))
 	console.log(`\nWind data written to ${outPath}`)
-	console.log(`Grid: ${width}x${height}, PNG: ${Math.round(base64.length / 1024)}KB base64`)
+	console.log(
+		`Grid: ${width}x${height}, PNG: ${Math.round(base64.length / 1024)}KB base64`
+	)
 }
 
 function encodePNG(width: number, height: number, rgba: Uint8Array): Buffer {
@@ -172,12 +183,14 @@ function makeChunk(type: string, data: Buffer): Buffer {
 }
 
 function crc32(buf: Buffer): number {
-	let c = 0xffffffff
+	let c = 0xFF_FF_FF_FF
 	for (let i = 0; i < buf.length; i++) {
 		c ^= buf[i]
-		for (let j = 0; j < 8; j++) c = c & 1 ? (c >>> 1) ^ 0xedb88320 : c >>> 1
+		for (let j = 0; j < 8; j++) {
+			c = c & 1 ? (c >>> 1) ^ 0xED_B8_83_20 : c >>> 1
+		}
 	}
-	return (c ^ 0xffffffff) >>> 0
+	return (c ^ 0xFF_FF_FF_FF) >>> 0
 }
 
 main().catch(console.error)

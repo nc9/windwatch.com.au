@@ -1,4 +1,4 @@
-export type WindUnit = {
+export interface WindUnit {
 	code: string
 	capacity: number
 	currentPower: number
@@ -7,7 +7,7 @@ export type WindUnit = {
 	lastSeen: string
 }
 
-export type WindFacility = {
+export interface WindFacility {
 	code: string
 	name: string
 	region: string
@@ -20,7 +20,7 @@ export type WindFacility = {
 	active: boolean
 }
 
-export type WindFacilityData = {
+export interface WindFacilityData {
 	facilities: WindFacility[]
 	lastUpdated: string
 	totalCapacity: number
@@ -28,7 +28,7 @@ export type WindFacilityData = {
 	aggregateCapacityFactor: number
 }
 
-export type WindFieldMeta = {
+export interface WindFieldMeta {
 	/** Vercel Blob URL to the wind PNG texture */
 	url: string
 	/** Grid width in pixels */

@@ -1,8 +1,9 @@
-import type { VercelRequest, VercelResponse } from "@vercel/node"
-import { put } from "@vercel/blob"
 import { deflateSync } from "node:zlib"
 
-const BBOX = { west: 105, east: 160, south: -48, north: -5 }
+import { put } from "@vercel/blob"
+import type { VercelRequest, VercelResponse } from "@vercel/node"
+
+const BBOX = { east: 160, north: -5, south: -48, west: 105 }
 const LON_STEPS = 20
 const LAT_STEPS = 15
 
@@ -17,9 +18,18 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 		const allLats: number[] = []
 		const allLngs: number[] = []
 		for (let y = 0; y < LAT_STEPS; y++) {
-			const lat = Number((BBOX.north + (y * (BBOX.south - BBOX.north)) / (LAT_STEPS - 1)).toFixed(2))
+			const lat = Number(
+				(
+					BBOX.north +
+					(y * (BBOX.south - BBOX.north)) / (LAT_STEPS - 1)
+				).toFixed(2)
+			)
 			for (let x = 0; x < LON_STEPS; x++) {
-				const lng = Number((BBOX.west + (x * (BBOX.east - BBOX.west)) / (LON_STEPS - 1)).toFixed(2))
+				const lng = Number(
+					(BBOX.west + (x * (BBOX.east - BBOX.west)) / (LON_STEPS - 1)).toFixed(
+						2
+					)
+				)
 				allLats.push(lat)
 				allLngs.push(lng)
 			}
@@ -35,11 +45,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 			url.searchParams.set("current", "wind_speed_10m,wind_direction_10m")
 
 			const r = await fetch(url.toString())
-			if (!r.ok) throw new Error(`Open-Meteo ${r.status}`)
+			if (!r.ok) {
+				throw new Error(`Open-Meteo ${r.status}`)
+			}
 			const json = await r.json()
 			results.push(...(Array.isArray(json) ? json : [json]))
 
-			if (i + BATCH < allLats.length) await new Promise((r) => setTimeout(r, 500))
+			if (i + BATCH < allLats.length) {
+				await new Promise((r) => setTimeout(r, 500))
+			}
 		}
 
 		// Convert to U/V
@@ -52,9 +66,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 			vValues.push(-speed * Math.cos(dirRad))
 		}
 
-		const uMin = Math.min(...uValues), uMax = Math.max(...uValues)
-		const vMin = Math.min(...vValues), vMax = Math.max(...vValues)
-		const uRange = uMax - uMin || 1, vRange = vMax - vMin || 1
+		const uMin = Math.min(...uValues),
+			uMax = Math.max(...uValues)
+		const vMin = Math.min(...vValues),
+			vMax = Math.max(...vValues)
+		const uRange = uMax - uMin || 1,
+			vRange = vMax - vMin || 1
 
 		// Encode as PNG
 		const pixels = new Uint8Array(LON_STEPS * LAT_STEPS * 4)
@@ -70,24 +87,27 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 		const base64 = pngBuffer.toString("base64")
 
 		const windData = {
-			image: `data:image/png;base64,${base64}`,
-			width: LON_STEPS,
-			height: LAT_STEPS,
-			uMin, uMax, vMin, vMax,
 			bbox: [BBOX.west, BBOX.south, BBOX.east, BBOX.north],
+			height: LAT_STEPS,
+			image: `data:image/png;base64,${base64}`,
 			timestamp: new Date().toISOString(),
+			uMax,
+			uMin,
+			vMax,
+			vMin,
+			width: LON_STEPS,
 		}
 
 		const { url } = await put("windwatch/wind.json", JSON.stringify(windData), {
 			access: "public",
-			contentType: "application/json",
 			addRandomSuffix: false,
+			contentType: "application/json",
 		})
 
-		return res.json({ ok: true, grid: `${LON_STEPS}x${LAT_STEPS}`, url })
-	} catch (err) {
-		console.error("Cron wind error:", err)
-		return res.status(500).json({ error: String(err) })
+		return res.json({ grid: `${LON_STEPS}x${LAT_STEPS}`, ok: true, url })
+	} catch (error) {
+		console.error("Cron wind error:", error)
+		return res.status(500).json({ error: String(error) })
 	}
 }
 
@@ -96,26 +116,38 @@ function encodePNG(width: number, height: number, rgba: Uint8Array): Buffer {
 	const ihdr = Buffer.alloc(13)
 	ihdr.writeUInt32BE(width, 0)
 	ihdr.writeUInt32BE(height, 4)
-	ihdr[8] = 8; ihdr[9] = 6
+	ihdr[8] = 8
+	ihdr[9] = 6
 	const raw = Buffer.alloc(height * (1 + width * 4))
 	for (let y = 0; y < height; y++) {
 		const o = y * (1 + width * 4)
 		raw[o] = 0
-		for (let x = 0; x < width * 4; x++) raw[o + 1 + x] = rgba[y * width * 4 + x]
+		for (let x = 0; x < width * 4; x++) {
+			raw[o + 1 + x] = rgba[y * width * 4 + x]
+		}
 	}
 	const compressed = deflateSync(raw)
-	return Buffer.concat([sig, chunk("IHDR", ihdr), chunk("IDAT", compressed), chunk("IEND", Buffer.alloc(0))])
+	return Buffer.concat([
+		sig,
+		chunk("IHDR", ihdr),
+		chunk("IDAT", compressed),
+		chunk("IEND", Buffer.alloc(0)),
+	])
 }
 
 function chunk(type: string, data: Buffer): Buffer {
 	const t = Buffer.from(type, "ascii")
-	const len = Buffer.alloc(4); len.writeUInt32BE(data.length, 0)
+	const len = Buffer.alloc(4)
+	len.writeUInt32BE(data.length, 0)
 	const crcBuf = Buffer.concat([t, data])
-	let c = 0xffffffff
+	let c = 0xFF_FF_FF_FF
 	for (let i = 0; i < crcBuf.length; i++) {
 		c ^= crcBuf[i]
-		for (let j = 0; j < 8; j++) c = c & 1 ? (c >>> 1) ^ 0xedb88320 : c >>> 1
+		for (let j = 0; j < 8; j++) {
+			c = c & 1 ? (c >>> 1) ^ 0xED_B8_83_20 : c >>> 1
+		}
 	}
-	const crc = Buffer.alloc(4); crc.writeUInt32BE((c ^ 0xffffffff) >>> 0, 0)
+	const crc = Buffer.alloc(4)
+	crc.writeUInt32BE((c ^ 0xFF_FF_FF_FF) >>> 0, 0)
 	return Buffer.concat([len, t, data, crc])
 }

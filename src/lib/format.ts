@@ -1,9 +1,9 @@
 const REGION_NAMES: Record<string, string> = {
 	NSW1: "New South Wales",
 	QLD1: "Queensland",
-	VIC1: "Victoria",
 	SA1: "South Australia",
 	TAS1: "Tasmania",
+	VIC1: "Victoria",
 	WA1: "Western Australia",
 }
 
@@ -12,7 +12,9 @@ export function regionName(code: string): string {
 }
 
 export function formatMW(mw: number): string {
-	if (mw >= 1000) return `${(mw / 1000).toFixed(1)} GW`
+	if (mw >= 1000) {
+		return `${(mw / 1000).toFixed(1)} GW`
+	}
 	return `${Math.round(mw)} MW`
 }
 

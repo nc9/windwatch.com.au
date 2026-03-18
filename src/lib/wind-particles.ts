@@ -3,7 +3,7 @@
  * Particles flow along wind paths with speed-based coloring and smooth trails.
  */
 
-export type WindData = {
+export interface WindData {
 	image: string
 	width: number
 	height: number
@@ -14,29 +14,29 @@ export type WindData = {
 	bbox: [number, number, number, number] // [west, south, east, north]
 }
 
-type Particle = {
+interface Particle {
 	lng: number
 	lat: number
 	age: number
 	maxAge: number
-	trail: Array<{ x: number; y: number; speed: number }>
+	trail: { x: number; y: number; speed: number }[]
 }
 
 // Wind color scale: deep purple → dark blue → light blue → cyan → green → yellow → red
 const SPEED_COLORS = [
-	[60, 20, 120],    // 0 m/s — deep purple (still)
-	[70, 40, 160],    // 1 m/s — purple
-	[60, 70, 200],    // 3 m/s — dark blue
-	[80, 130, 240],   // 5 m/s — blue
-	[100, 160, 255],  // 7 m/s — light blue
-	[60, 210, 230],   // 9 m/s — cyan
-	[60, 220, 180],   // 11 m/s — teal
-	[80, 230, 120],   // 13 m/s — green
-	[160, 240, 60],   // 16 m/s — lime
-	[240, 240, 50],   // 19 m/s — yellow
-	[255, 180, 40],   // 22 m/s — orange
-	[255, 90, 50],    // 26 m/s — red
-	[255, 60, 180],   // 30+ m/s — hot pink (extreme)
+	[60, 20, 120], // 0 m/s — deep purple (still)
+	[70, 40, 160], // 1 m/s — purple
+	[60, 70, 200], // 3 m/s — dark blue
+	[80, 130, 240], // 5 m/s — blue
+	[100, 160, 255], // 7 m/s — light blue
+	[60, 210, 230], // 9 m/s — cyan
+	[60, 220, 180], // 11 m/s — teal
+	[80, 230, 120], // 13 m/s — green
+	[160, 240, 60], // 16 m/s — lime
+	[240, 240, 50], // 19 m/s — yellow
+	[255, 180, 40], // 22 m/s — orange
+	[255, 90, 50], // 26 m/s — red
+	[255, 60, 180], // 30+ m/s — hot pink (extreme)
 ]
 
 function speedColor(speed: number): string {
@@ -72,14 +72,16 @@ export class WindParticleRenderer {
 
 		// Clean up any orphaned canvases from HMR
 		const container = map.getCanvas().parentElement
-		container?.querySelectorAll("[data-wind-layer]").forEach((el: Element) => el.remove())
+		container
+			?.querySelectorAll("[data-wind-layer]")
+			.forEach((el: Element) => el.remove())
 
 		this.canvas = document.createElement("canvas")
 		this.canvas.dataset.windLayer = "particles"
 		this.canvas.style.cssText =
 			"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;"
 		this.ctx = this.canvas.getContext("2d")!
-		container?.appendChild(this.canvas)
+		container?.append(this.canvas)
 
 		this.resize()
 		map.on("resize", () => this.resize())
@@ -87,7 +89,9 @@ export class WindParticleRenderer {
 		map.on("move", () => {
 			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 			// Reset all trails so they rebuild from current screen positions
-			for (const p of this.particles) p.trail = []
+			for (const p of this.particles) {
+				p.trail = []
+			}
 		})
 	}
 
@@ -133,11 +137,18 @@ export class WindParticleRenderer {
 
 	/** Render heatmap to offscreen canvas, add as MapLibre image source between terrain and labels */
 	private buildHeatmap() {
-		if (!this.windData || !this.windImage) return
+		if (!this.windData || !this.windImage) {
+			return
+		}
 
 		const dataUrl = this.renderHeatmapImage()
 		const [west, south, east, north] = this.windData.bbox
-		const coords: [[number, number], [number, number], [number, number], [number, number]] = [
+		const coords: [
+			[number, number],
+			[number, number],
+			[number, number],
+			[number, number],
+		] = [
 			[west, north],
 			[east, north],
 			[east, south],
@@ -146,12 +157,16 @@ export class WindParticleRenderer {
 
 		// Clean up existing source/layer from HMR
 		try {
-			if (this.map.getLayer("wind-heatmap")) this.map.removeLayer("wind-heatmap")
-			if (this.map.getSource("wind-heatmap")) this.map.removeSource("wind-heatmap")
-		} catch (_) {}
+			if (this.map.getLayer("wind-heatmap")) {
+				this.map.removeLayer("wind-heatmap")
+			}
+			if (this.map.getSource("wind-heatmap")) {
+				this.map.removeSource("wind-heatmap")
+			}
+		} catch {}
 
 		// Insert heatmap below labels but above everything else
-		const layers = this.map.getStyle().layers
+		const { layers } = this.map.getStyle()
 		let insertBefore: string | undefined
 		for (const layer of layers) {
 			if (layer.type === "symbol") {
@@ -161,39 +176,43 @@ export class WindParticleRenderer {
 		}
 
 		this.map.addSource("wind-heatmap", {
+			coordinates: coords,
 			type: "image",
 			url: dataUrl,
-			coordinates: coords,
 		})
 
 		this.map.addLayer(
 			{
 				id: "wind-heatmap",
-				type: "raster",
+				paint: { "raster-fade-duration": 0, "raster-opacity": 0.5 },
 				source: "wind-heatmap",
-				paint: { "raster-opacity": 0.5, "raster-fade-duration": 0 },
+				type: "raster",
 			},
-			insertBefore,
+			insertBefore
 		)
 
 		this.heatmapSourceAdded = true
 	}
 
 	private updateHeatmap() {
-		if (!this.heatmapSourceAdded || !this.windData || !this.windImage) return
+		if (!this.heatmapSourceAdded || !this.windData || !this.windImage) {
+			return
+		}
 		const source = this.map.getSource("wind-heatmap") as any
-		if (!source) return
+		if (!source) {
+			return
+		}
 
 		const dataUrl = this.renderHeatmapImage()
 		const [west, south, east, north] = this.windData.bbox
 		source.updateImage({
-			url: dataUrl,
 			coordinates: [
 				[west, north],
 				[east, north],
 				[east, south],
 				[west, south],
 			],
+			url: dataUrl,
 		})
 	}
 
@@ -212,7 +231,7 @@ export class WindParticleRenderer {
 		offscreen.height = gridH
 		const octx = offscreen.getContext("2d")!
 		const imgData = octx.createImageData(gridW, gridH)
-		const data = imgData.data
+		const { data } = imgData
 
 		for (let gy = 0; gy < gridH; gy++) {
 			for (let gx = 0; gx < gridW; gx++) {
@@ -242,12 +261,17 @@ export class WindParticleRenderer {
 	/** Scale particle count — fewer when zoomed in since they're packed into smaller area */
 	private targetParticleCount(): number {
 		const zoom = this.map.getZoom()
-		const scale = Math.pow(2, this.baseZoom - zoom)
-		return Math.max(200, Math.round(this.baseParticleCount * Math.min(1, scale)))
+		const scale = 2 ** (this.baseZoom - zoom)
+		return Math.max(
+			200,
+			Math.round(this.baseParticleCount * Math.min(1, scale))
+		)
 	}
 
 	private randomParticle(): Particle {
-		if (!this.windData) return { lng: 134, lat: -28, age: 0, maxAge: 60, trail: [] }
+		if (!this.windData) {
+			return { age: 0, lat: -28, lng: 134, maxAge: 60, trail: [] }
+		}
 		const [bboxW, bboxS, bboxE, bboxN] = this.windData.bbox
 
 		// Spawn within visible viewport, clamped to wind data bbox
@@ -258,20 +282,24 @@ export class WindParticleRenderer {
 		const north = Math.min(bounds.getNorth(), bboxN)
 
 		return {
-			lng: west + Math.random() * (east - west),
-			lat: south + Math.random() * (north - south),
 			age: Math.floor(Math.random() * 60),
+			lat: south + Math.random() * (north - south),
+			lng: west + Math.random() * (east - west),
 			maxAge: 40 + Math.floor(Math.random() * 40),
 			trail: [],
 		}
 	}
 
 	private getWind(lng: number, lat: number): [number, number] | null {
-		if (!this.windData || !this.windImage) return null
+		if (!this.windData || !this.windImage) {
+			return null
+		}
 		const { bbox, width, height, uMin, uMax, vMin, vMax } = this.windData
 		const [west, south, east, north] = bbox
 
-		if (lng < west || lng > east || lat < south || lat > north) return null
+		if (lng < west || lng > east || lat < south || lat > north) {
+			return null
+		}
 
 		const gx = ((lng - west) / (east - west)) * (width - 1)
 		const gy = ((north - lat) / (north - south)) * (height - 1)
@@ -297,8 +325,14 @@ export class WindParticleRenderer {
 		const [u11, v11] = pix(x1, y1)
 
 		return [
-			u00 * (1 - fx) * (1 - fy) + u10 * fx * (1 - fy) + u01 * (1 - fx) * fy + u11 * fx * fy,
-			v00 * (1 - fx) * (1 - fy) + v10 * fx * (1 - fy) + v01 * (1 - fx) * fy + v11 * fx * fy,
+			u00 * (1 - fx) * (1 - fy) +
+				u10 * fx * (1 - fy) +
+				u01 * (1 - fx) * fy +
+				u11 * fx * fy,
+			v00 * (1 - fx) * (1 - fy) +
+				v10 * fx * (1 - fy) +
+				v01 * (1 - fx) * fy +
+				v11 * fx * fy,
 		]
 	}
 
@@ -315,15 +349,19 @@ export class WindParticleRenderer {
 		}
 		this.lastFrameTime = now
 
-		const ctx = this.ctx
+		const { ctx } = this
 		const w = this.canvas.width
 		const h = this.canvas.height
-		const bbox = this.windData.bbox
+		const { bbox } = this.windData
 
 		// Adjust particle count for current zoom
 		const target = this.targetParticleCount()
-		while (this.particles.length > target) this.particles.pop()
-		while (this.particles.length < target) this.particles.push(this.randomParticle())
+		while (this.particles.length > target) {
+			this.particles.pop()
+		}
+		while (this.particles.length < target) {
+			this.particles.push(this.randomParticle())
+		}
 
 		// Clear entire canvas each frame — we redraw all trails
 		ctx.clearRect(0, 0, w, h)
@@ -341,7 +379,7 @@ export class WindParticleRenderer {
 
 			// Move in geographic space — scale down at higher zoom so particles don't fly
 			const zoom = this.map.getZoom()
-			const zoomScale = this.speedFactor * Math.pow(2, 4.5 - zoom)
+			const zoomScale = this.speedFactor * 2 ** (4.5 - zoom)
 			const distortion = Math.cos((p.lat * Math.PI) / 180)
 			p.lng += (u * zoomScale) / Math.max(distortion, 0.1)
 			p.lat += v * zoomScale
@@ -349,7 +387,7 @@ export class WindParticleRenderer {
 
 			// Project to screen and add to trail
 			const screen = this.map.project([p.lng, p.lat])
-			p.trail.push({ x: screen.x, y: screen.y, speed })
+			p.trail.push({ speed, x: screen.x, y: screen.y })
 
 			// Trim trail
 			if (p.trail.length > this.trailLength) {
@@ -357,13 +395,20 @@ export class WindParticleRenderer {
 			}
 
 			// Reset if out of bbox
-			if (p.lng < bbox[0] || p.lng > bbox[2] || p.lat < bbox[1] || p.lat > bbox[3]) {
+			if (
+				p.lng < bbox[0] ||
+				p.lng > bbox[2] ||
+				p.lat < bbox[1] ||
+				p.lat > bbox[3]
+			) {
 				Object.assign(p, this.randomParticle())
 				continue
 			}
 
 			// Draw trail as gradient line segments
-			if (p.trail.length < 2) continue
+			if (p.trail.length < 2) {
+				continue
+			}
 
 			for (let i = 1; i < p.trail.length; i++) {
 				const prev = p.trail[i - 1]
@@ -371,9 +416,13 @@ export class WindParticleRenderer {
 
 				// Skip if off-screen
 				if (
-					curr.x < -50 || curr.x > w + 50 ||
-					curr.y < -50 || curr.y > h + 50
-				) continue
+					curr.x < -50 ||
+					curr.x > w + 50 ||
+					curr.y < -50 ||
+					curr.y > h + 50
+				) {
+					continue
+				}
 
 				// Opacity fades along trail (head=bright, tail=dim)
 				const progress = i / p.trail.length
@@ -394,7 +443,9 @@ export class WindParticleRenderer {
 	}
 
 	start() {
-		if (this.animId) return
+		if (this.animId) {
+			return
+		}
 		this.animId = requestAnimationFrame(this.frame)
 	}
 
@@ -412,7 +463,7 @@ export class WindParticleRenderer {
 			try {
 				this.map.removeLayer("wind-heatmap")
 				this.map.removeSource("wind-heatmap")
-			} catch (_) {}
+			} catch {}
 			this.heatmapSourceAdded = false
 		}
 	}

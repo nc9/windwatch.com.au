@@ -1,5 +1,5 @@
-import { formatMW, formatPercent, regionName } from "../lib/format"
 import { capacityFactorColor } from "../lib/colors"
+import { formatMW, formatPercent, regionName } from "../lib/format"
 
 /**
  * Returns HTML string for a MapLibre popup (not a React component —
