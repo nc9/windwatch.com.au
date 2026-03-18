@@ -187,7 +187,7 @@ export class WindParticleRenderer {
 		// Scale up with smoothing
 		hctx.imageSmoothingEnabled = true
 		hctx.imageSmoothingQuality = "high"
-		hctx.globalAlpha = 0.45
+		hctx.globalAlpha = 0.25
 		hctx.drawImage(offscreen, 0, 0, cw, ch)
 
 		hctx.globalAlpha = 1
