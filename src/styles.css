@@ -13,3 +13,86 @@ body,
 	color: #e5e5e5;
 	font-family: system-ui, -apple-system, sans-serif;
 }
+
+/* Popups above wind canvases */
+.maplibregl-popup {
+	z-index: 10 !important;
+}
+
+/* Dark popup styling */
+.maplibregl-popup-content {
+	background: rgba(17, 24, 39, 0.95) !important;
+	backdrop-filter: blur(12px);
+	border: 1px solid rgba(75, 85, 99, 0.4);
+	border-radius: 10px !important;
+	padding: 14px 16px !important;
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+}
+
+.maplibregl-popup-tip {
+	border-top-color: rgba(17, 24, 39, 0.95) !important;
+	border-bottom-color: rgba(17, 24, 39, 0.95) !important;
+}
+
+.maplibregl-popup-close-button {
+	color: #9ca3af !important;
+	font-size: 18px !important;
+	padding: 4px 8px !important;
+	right: 4px !important;
+	top: 4px !important;
+}
+
+.maplibregl-popup-close-button:hover {
+	color: #f3f4f6 !important;
+	background: rgba(75, 85, 99, 0.3) !important;
+	border-radius: 4px;
+}
+
+/* Dark zoom controls */
+.maplibregl-ctrl-group {
+	background: rgba(17, 24, 39, 0.85) !important;
+	border: 1px solid rgba(75, 85, 99, 0.4) !important;
+	backdrop-filter: blur(8px);
+	border-radius: 8px !important;
+	overflow: hidden;
+}
+
+.maplibregl-ctrl-group button {
+	background: transparent !important;
+	color: #d1d5db !important;
+	border-color: rgba(75, 85, 99, 0.3) !important;
+}
+
+.maplibregl-ctrl-group button:hover {
+	background: rgba(75, 85, 99, 0.4) !important;
+}
+
+.maplibregl-ctrl-group button .maplibregl-ctrl-icon {
+	filter: invert(1) brightness(0.8);
+}
+
+/* Dark attribution */
+.maplibregl-ctrl-attrib {
+	background: rgba(17, 24, 39, 0.7) !important;
+	color: #6b7280 !important;
+	font-size: 10px !important;
+	backdrop-filter: blur(4px);
+}
+
+.maplibregl-ctrl-attrib a {
+	color: #9ca3af !important;
+}
+
+.maplibregl-ctrl-attrib-button {
+	filter: invert(1) brightness(0.6);
+}
+
+/* MapLibre logo */
+.maplibregl-ctrl-logo {
+	filter: brightness(0.5);
+}
+
+/* Marker hover z-index */
+.ww-marker:hover {
+	z-index: 10 !important;
+}

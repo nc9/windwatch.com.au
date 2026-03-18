@@ -7,3 +7,4 @@ dist/
 .env.local
 *.tsbuildinfo
 app.config.timestamp_*.js
+.vercel

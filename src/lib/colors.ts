@@ -1,47 +1,51 @@
 /**
- * Interpolate capacity factor (0-100) to a color.
- * 0% = red, 50% = yellow, 100% = green
+ * Capacity factor color scale for wind:
+ * 0% = red (offline), ~3% = white (low), ~10% = lime, ~25% = green, 40%+ = dark green
  */
+
+const CF_STOPS: Array<[number, [number, number, number]]> = [
+	[0, [239, 68, 68]],     // red — offline
+	[3, [255, 255, 255]],   // white — barely running
+	[10, [190, 242, 100]],  // lime — generating
+	[20, [74, 222, 128]],   // green — decent
+	[30, [22, 163, 74]],    // green — good
+	[40, [21, 128, 61]],    // dark green — great
+]
+
 export function capacityFactorColor(cf: number): string {
-	const t = Math.max(0, Math.min(100, cf)) / 100
+	const v = Math.max(0, cf)
 
-	let r: number
-	let g: number
-	const b = 30
-
-	if (t < 0.5) {
-		// red → yellow
-		const s = t / 0.5
-		r = 220
-		g = Math.round(40 + s * 180)
-	} else {
-		// yellow → green
-		const s = (t - 0.5) / 0.5
-		r = Math.round(220 - s * 186)
-		g = Math.round(220 - s * 23)
+	// Find the two stops to interpolate between
+	for (let i = 1; i < CF_STOPS.length; i++) {
+		if (v <= CF_STOPS[i][0]) {
+			const [lo, colA] = CF_STOPS[i - 1]
+			const [hi, colB] = CF_STOPS[i]
+			const t = (v - lo) / (hi - lo)
+			const r = Math.round(colA[0] + (colB[0] - colA[0]) * t)
+			const g = Math.round(colA[1] + (colB[1] - colA[1]) * t)
+			const b = Math.round(colA[2] + (colB[2] - colA[2]) * t)
+			return `rgb(${r},${g},${b})`
+		}
 	}
 
-	return `rgb(${r},${g},${b})`
+	// Above max stop — dark green
+	const last = CF_STOPS[CF_STOPS.length - 1][1]
+	return `rgb(${last[0]},${last[1]},${last[2]})`
 }
 
 /**
- * Returns a MapLibre interpolate expression for capacity factor coloring.
- * Used in circle-color paint property.
+ * MapLibre interpolate expression for circle-color paint property.
  */
 export function capacityFactorExpression(): unknown[] {
 	return [
 		"interpolate",
 		["linear"],
 		["get", "capacityFactor"],
-		0,
-		"#dc2626",
-		25,
-		"#ea580c",
-		50,
-		"#eab308",
-		75,
-		"#65a30d",
-		100,
-		"#22c55e",
+		0, "#ef4444",
+		3, "#ffffff",
+		10, "#bef264",
+		20, "#4ade80",
+		30, "#16a34a",
+		40, "#15803d",
 	]
 }
