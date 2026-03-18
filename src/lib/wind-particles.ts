@@ -22,21 +22,27 @@ type Particle = {
 	trail: Array<{ x: number; y: number; speed: number }>
 }
 
-// Wind speed → color (blue=calm, cyan, green, yellow, orange, red=strong)
+// Windy.com-style color scale: dark blue → blue → cyan → green → yellow → orange → purple
 const SPEED_COLORS = [
-	[30, 60, 120],    // 0 m/s — dark blue
-	[50, 120, 180],   // 3 m/s — blue
-	[80, 180, 200],   // 6 m/s — cyan
-	[100, 200, 150],  // 9 m/s — teal
-	[160, 220, 100],  // 12 m/s — yellow-green
-	[220, 200, 60],   // 15 m/s — yellow
-	[240, 150, 40],   // 18 m/s — orange
-	[240, 80, 30],    // 21 m/s — red-orange
-	[220, 40, 40],    // 24+ m/s — red
+	[15, 30, 80],     // 0 m/s — deep navy
+	[30, 55, 130],    // 2 m/s — dark blue
+	[25, 90, 165],    // 4 m/s — blue
+	[30, 130, 180],   // 6 m/s — blue-cyan
+	[40, 170, 170],   // 8 m/s — teal
+	[60, 190, 130],   // 10 m/s — teal-green
+	[100, 205, 80],   // 12 m/s — green
+	[160, 215, 50],   // 14 m/s — yellow-green
+	[210, 210, 40],   // 16 m/s — yellow
+	[240, 180, 30],   // 18 m/s — yellow-orange
+	[245, 130, 20],   // 20 m/s — orange
+	[240, 80, 20],    // 22 m/s — dark orange
+	[200, 40, 80],    // 24 m/s — red-magenta
+	[160, 30, 130],   // 26 m/s — purple
+	[120, 20, 160],   // 28+ m/s — deep purple (extreme)
 ]
 
 function speedColor(speed: number): string {
-	const t = Math.min(speed / 25, 1) * (SPEED_COLORS.length - 1)
+	const t = Math.min(speed / 30, 1) * (SPEED_COLORS.length - 1)
 	const i = Math.floor(t)
 	const f = t - i
 	const a = SPEED_COLORS[Math.min(i, SPEED_COLORS.length - 1)]
@@ -140,27 +146,36 @@ export class WindParticleRenderer {
 		const { bbox, width, height, uMin, uMax, vMin, vMax } = this.windData
 		const [west, south, east, north] = bbox
 
-		// Sample wind speed at a coarser grid and draw colored rectangles
-		const step = 8 // pixels between samples
-		for (let sy = 0; sy < ch; sy += step) {
-			for (let sx = 0; sx < cw; sx += step) {
+		// Render wind speed heatmap — draw to a small offscreen canvas then scale up (smooth)
+		const gridW = 120
+		const gridH = Math.round(gridW * (ch / cw))
+		const offscreen = document.createElement("canvas")
+		offscreen.width = gridW
+		offscreen.height = gridH
+		const octx = offscreen.getContext("2d")!
+
+		for (let gy = 0; gy < gridH; gy++) {
+			for (let gx = 0; gx < gridW; gx++) {
+				const sx = (gx / gridW) * cw
+				const sy = (gy / gridH) * ch
 				const lngLat = this.map.unproject([sx, sy])
-				const lng = lngLat.lng
-				const lat = lngLat.lat
 
-				if (lng < west || lng > east || lat < south || lat > north) continue
+				if (lngLat.lng < west || lngLat.lng > east || lngLat.lat < south || lngLat.lat > north) continue
 
-				const wind = this.getWind(lng, lat)
+				const wind = this.getWind(lngLat.lng, lngLat.lat)
 				if (!wind) continue
 
 				const speed = Math.sqrt(wind[0] * wind[0] + wind[1] * wind[1])
-				const color = speedColor(speed)
-
-				hctx.fillStyle = color
-				hctx.globalAlpha = Math.min(0.25, speed / 40)
-				hctx.fillRect(sx, sy, step, step)
+				octx.fillStyle = speedColor(speed)
+				octx.fillRect(gx, gy, 1, 1)
 			}
 		}
+
+		// Scale up with smoothing
+		hctx.imageSmoothingEnabled = true
+		hctx.imageSmoothingQuality = "high"
+		hctx.globalAlpha = 0.4
+		hctx.drawImage(offscreen, 0, 0, cw, ch)
 
 		hctx.globalAlpha = 1
 	}
@@ -213,18 +228,18 @@ export class WindParticleRenderer {
 		]
 	}
 
-	private frame = (timestamp: number = 0) => {
+	private frame = () => {
 		if (!this.windData || !this.windImage) {
 			this.animId = requestAnimationFrame(this.frame)
 			return
 		}
 
-		// Throttle frame rate
-		if (timestamp - this.lastFrameTime < this.frameInterval) {
+		const now = performance.now()
+		if (now - this.lastFrameTime < this.frameInterval) {
 			this.animId = requestAnimationFrame(this.frame)
 			return
 		}
-		this.lastFrameTime = timestamp
+		this.lastFrameTime = now
 
 		const ctx = this.ctx
 		const w = this.canvas.width
