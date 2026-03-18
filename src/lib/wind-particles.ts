@@ -84,12 +84,19 @@ export class WindParticleRenderer {
 
 		this.resize()
 		map.on("resize", () => this.resize())
+		// Clear particle trails on map interaction — they're in screen-space
+		map.on("move", () => {
+			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
+			// Reset all trails so they rebuild from current screen positions
+			for (const p of this.particles) p.trail = []
+		})
 	}
 
 	private resize() {
-		const { width, height } = this.map.getCanvas()
-		this.canvas.width = width
-		this.canvas.height = height
+		// Use CSS pixel dimensions — map.project()/unproject() return CSS pixels
+		const el = this.map.getCanvas()
+		this.canvas.width = el.clientWidth
+		this.canvas.height = el.clientHeight
 	}
 
 	async setWindData(data: WindData) {
@@ -140,7 +147,9 @@ export class WindParticleRenderer {
 		if (!this.heatmapCanvas || !this.windData || !this.windImage) return
 
 		const hc = this.heatmapCanvas
-		const { width: cw, height: ch } = this.map.getCanvas()
+		const el = this.map.getCanvas()
+		const cw = el.clientWidth
+		const ch = el.clientHeight
 		hc.width = cw
 		hc.height = ch
 		const hctx = hc.getContext("2d")!
@@ -178,7 +187,7 @@ export class WindParticleRenderer {
 		// Scale up with smoothing
 		hctx.imageSmoothingEnabled = true
 		hctx.imageSmoothingQuality = "high"
-		hctx.globalAlpha = 0.3
+		hctx.globalAlpha = 0.45
 		hctx.drawImage(offscreen, 0, 0, cw, ch)
 
 		hctx.globalAlpha = 1
@@ -300,14 +309,14 @@ export class WindParticleRenderer {
 
 				// Opacity fades along trail (head=bright, tail=dim)
 				const progress = i / p.trail.length
-				const alpha = progress * progress * 0.5
+				const alpha = progress * 0.9
 
 				ctx.beginPath()
 				ctx.moveTo(prev.x, prev.y)
 				ctx.lineTo(curr.x, curr.y)
-				ctx.strokeStyle = speedColor(curr.speed)
+				ctx.strokeStyle = "rgba(255,255,255,0.9)"
 				ctx.globalAlpha = alpha
-				ctx.lineWidth = 0.8 + progress * 0.8
+				ctx.lineWidth = 1 + progress * 1
 				ctx.stroke()
 			}
 		}

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import maplibregl from "maplibre-gl"
 import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-csp-worker.js?url"
 import type { WindFacilityData } from "../lib/types"
@@ -21,6 +21,22 @@ export function WindMap({ facilities, windData }: Props) {
 	const mapRef = useRef<maplibregl.Map | null>(null)
 	const windRendererRef = useRef<any>(null)
 	const markersRef = useRef<maplibregl.Marker[]>([])
+	const [windGrid, setWindGrid] = useState<ImageData | null>(null)
+
+	// Decode wind PNG once when windData arrives
+	useEffect(() => {
+		if (!windData) return
+		const img = new Image()
+		img.onload = () => {
+			const c = document.createElement("canvas")
+			c.width = windData.width
+			c.height = windData.height
+			const ctx = c.getContext("2d")!
+			ctx.drawImage(img, 0, 0)
+			setWindGrid(ctx.getImageData(0, 0, windData.width, windData.height))
+		}
+		img.src = windData.image
+	}, [windData])
 
 	useEffect(() => {
 		if (!containerRef.current) return
@@ -64,11 +80,12 @@ export function WindMap({ facilities, windData }: Props) {
 		}
 	}, [])
 
-	// Wind particles
+	// Wind particles — init once map and wind data are both ready
 	useEffect(() => {
 		const map = mapRef.current
 		if (!map || !windData) return
 
+		// Simple direct init — no cancelled flag complexity
 		const init = async () => {
 			const { WindParticleRenderer } = await import("../lib/wind-particles")
 			if (windRendererRef.current) windRendererRef.current.destroy()
@@ -78,8 +95,7 @@ export function WindMap({ facilities, windData }: Props) {
 			windRendererRef.current = renderer
 		}
 
-		if (map.isStyleLoaded()) init()
-		else map.once("style.load", init)
+		init()
 	}, [windData])
 
 	// Facility markers
@@ -96,7 +112,7 @@ export function WindMap({ facilities, windData }: Props) {
 			const color = capacityFactorColor(f.capacityFactor)
 			const active = f.active && f.currentPower > 0
 			const size = Math.max(8, Math.min(28, 6 + Math.sqrt(f.totalCapacity) * 0.5))
-			const localWind = windData ? getWindAt(windData, f.lng, f.lat) : null
+			const localWind = windData && windGrid ? getWindAt(windData, windGrid, f.lng, f.lat) : null
 
 			const el = createMarkerElement(size, color, active)
 
@@ -113,30 +129,16 @@ export function WindMap({ facilities, windData }: Props) {
 
 			markersRef.current.push(marker)
 		}
-	}, [facilities, windData])
+	}, [facilities, windData, windGrid])
 
 	return <div ref={containerRef} className="h-full w-full" />
 }
 
 type LocalWind = { speed: number; direction: number; cardinal: string }
 
-function getWindAt(wd: WindData, lng: number, lat: number): LocalWind | null {
+function getWindAt(wd: WindData, grid: ImageData, lng: number, lat: number): LocalWind | null {
 	const [west, south, east, north] = wd.bbox
 	if (lng < west || lng > east || lat < south || lat > north) return null
-
-	// We need to decode the wind PNG — load it synchronously from the base64
-	// Since we can't do async here, we'll compute from the raw metadata
-	// Actually we need the image data. Let's cache it.
-	if (!windImageCache) {
-		const img = document.createElement("img")
-		img.src = wd.image
-		const c = document.createElement("canvas")
-		c.width = wd.width
-		c.height = wd.height
-		const ctx = c.getContext("2d")!
-		ctx.drawImage(img, 0, 0)
-		windImageCache = ctx.getImageData(0, 0, wd.width, wd.height)
-	}
 
 	const gx = ((lng - west) / (east - west)) * (wd.width - 1)
 	const gy = ((north - lat) / (north - south)) * (wd.height - 1)
@@ -150,8 +152,8 @@ function getWindAt(wd: WindData, lng: number, lat: number): LocalWind | null {
 	const pix = (x: number, y: number): [number, number] => {
 		const i = (y * wd.width + x) * 4
 		return [
-			wd.uMin + (windImageCache!.data[i] / 255) * (wd.uMax - wd.uMin),
-			wd.vMin + (windImageCache!.data[i + 1] / 255) * (wd.vMax - wd.vMin),
+			wd.uMin + (grid.data[i] / 255) * (wd.uMax - wd.uMin),
+			wd.vMin + (grid.data[i + 1] / 255) * (wd.vMax - wd.vMin),
 		]
 	}
 
@@ -164,7 +166,6 @@ function getWindAt(wd: WindData, lng: number, lat: number): LocalWind | null {
 	const v = v00 * (1 - fx) * (1 - fy) + v10 * fx * (1 - fy) + v01 * (1 - fx) * fy + v11 * fx * fy
 
 	const speed = Math.sqrt(u * u + v * v)
-	// Wind direction: meteorological convention (where wind comes FROM)
 	const dirRad = Math.atan2(-u, -v)
 	const direction = ((dirRad * 180) / Math.PI + 360) % 360
 
@@ -173,8 +174,6 @@ function getWindAt(wd: WindData, lng: number, lat: number): LocalWind | null {
 
 	return { speed, direction, cardinal }
 }
-
-let windImageCache: ImageData | null = null
 
 function createMarkerElement(size: number, color: string, active: boolean): HTMLDivElement {
 	// Outer wrapper — MapLibre controls its transform, so we don't touch it
