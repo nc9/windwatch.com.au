@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.output/
+.vinxi/
+.vercel/
+.env
+.env.local
+*.tsbuildinfo
+app.config.timestamp_*.js

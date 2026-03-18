@@ -1,0 +1,15 @@
+@import "tailwindcss";
+@import "maplibre-gl/dist/maplibre-gl.css";
+
+html,
+body,
+#root {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+	background: #0a0a0a;
+	color: #e5e5e5;
+	font-family: system-ui, -apple-system, sans-serif;
+}
