@@ -9,16 +9,20 @@ const FACILITIES_URL =
 	import.meta.env.VITE_FACILITIES_URL || "/data/facilities.json"
 const WIND_URL = import.meta.env.VITE_WIND_URL || "/data/wind.json"
 
+/** Fetch with cache-busting to bypass Vercel Blob CDN cache */
+const fetchJSON = (url: string) =>
+	fetch(`${url}?t=${Date.now()}`, { cache: "no-store" }).then((r) => r.json())
+
 export function App() {
 	const facilities = useQuery<WindFacilityData>({
 		queryKey: ["facilities"],
-		queryFn: () => fetch(FACILITIES_URL).then((r) => r.json()),
+		queryFn: () => fetchJSON(FACILITIES_URL),
 	})
 
 	const wind = useQuery<WindData>({
 		queryKey: ["wind"],
-		queryFn: () => fetch(WIND_URL).then((r) => r.json()),
-		refetchInterval: 6 * 60 * 60 * 1000, // wind updates every 6h
+		queryFn: () => fetchJSON(WIND_URL),
+		refetchInterval: 6 * 60 * 60 * 1000,
 	})
 
 	return (
