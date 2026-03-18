@@ -1,31 +1,36 @@
-import { useEffect, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import type { WindFacilityData } from "./lib/types"
 import type { WindData } from "./lib/wind-particles"
 import { WindMap } from "./components/wind-map"
 import { StatsPanel } from "./components/stats-panel"
 import { Legend } from "./components/legend"
 
+const FACILITIES_URL =
+	import.meta.env.VITE_FACILITIES_URL || "/data/facilities.json"
+const WIND_URL = import.meta.env.VITE_WIND_URL || "/data/wind.json"
+
 export function App() {
-	const [facilities, setFacilities] = useState<WindFacilityData | null>(null)
-	const [windData, setWindData] = useState<WindData | null>(null)
-	const [error, setError] = useState<string | null>(null)
+	const facilities = useQuery<WindFacilityData>({
+		queryKey: ["facilities"],
+		queryFn: () => fetch(FACILITIES_URL).then((r) => r.json()),
+	})
 
-	useEffect(() => {
-		fetch("/data/facilities.json")
-			.then((r) => r.json())
-			.then(setFacilities)
-			.catch((e) => setError(String(e)))
-
-		fetch("/data/wind.json")
-			.then((r) => r.json())
-			.then(setWindData)
-			.catch((e) => console.error("Wind data load error:", e))
-	}, [])
+	const wind = useQuery<WindData>({
+		queryKey: ["wind"],
+		queryFn: () => fetch(WIND_URL).then((r) => r.json()),
+		refetchInterval: 6 * 60 * 60 * 1000, // wind updates every 6h
+	})
 
 	return (
 		<div className="relative h-screen w-screen bg-neutral-950">
-			<WindMap facilities={facilities} windData={windData} />
-			<StatsPanel data={facilities} error={error} />
+			<WindMap
+				facilities={facilities.data ?? null}
+				windData={wind.data ?? null}
+			/>
+			<StatsPanel
+				data={facilities.data ?? null}
+				error={facilities.error ? String(facilities.error) : null}
+			/>
 			<Legend />
 		</div>
 	)
