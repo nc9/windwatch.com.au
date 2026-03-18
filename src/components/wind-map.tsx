@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from "react"
 import maplibregl from "maplibre-gl"
-import maplibreWorkerUrl from "maplibre-gl/dist/maplibre-gl-csp-worker.js?url"
 import type { WindFacilityData } from "../lib/types"
 import type { WindData } from "../lib/wind-particles"
-import { capacityFactorColor } from "../lib/colors"
+import { capacityFactorColor, capacityFactorExpression } from "../lib/colors"
 import { formatMW, formatPercent, regionName } from "../lib/format"
-
-maplibregl.workerUrl = maplibreWorkerUrl
 
 const AUSTRALIA_CENTER: [number, number] = [134, -27]
 const AUSTRALIA_ZOOM = 4.5
@@ -20,7 +17,7 @@ export function WindMap({ facilities, windData }: Props) {
 	const containerRef = useRef<HTMLDivElement>(null)
 	const mapRef = useRef<maplibregl.Map | null>(null)
 	const windRendererRef = useRef<any>(null)
-	const markersRef = useRef<maplibregl.Marker[]>([])
+	const popupRef = useRef<maplibregl.Popup | null>(null)
 	const [windGrid, setWindGrid] = useState<ImageData | null>(null)
 
 	// Decode wind PNG once when windData arrives
@@ -43,21 +40,7 @@ export function WindMap({ facilities, windData }: Props) {
 
 		const map = new maplibregl.Map({
 			container: containerRef.current,
-			style: {
-				version: 8,
-				sources: {
-					carto: {
-						type: "raster",
-						tiles: [
-							"https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-							"https://b.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png",
-						],
-						tileSize: 256,
-						attribution: "&copy; CartoDB &copy; OSM contributors",
-					},
-				},
-				layers: [{ id: "carto", type: "raster", source: "carto" }],
-			},
+			style: "https://api.protomaps.com/styles/v5/grayscale/en.json?key=fa8e7fa44153e559",
 			center: AUSTRALIA_CENTER,
 			zoom: AUSTRALIA_ZOOM,
 			minZoom: 3,
@@ -73,8 +56,7 @@ export function WindMap({ facilities, windData }: Props) {
 				windRendererRef.current.destroy()
 				windRendererRef.current = null
 			}
-			for (const m of markersRef.current) m.remove()
-			markersRef.current = []
+			popupRef.current?.remove()
 			map.remove()
 			mapRef.current = null
 		}
@@ -98,36 +80,114 @@ export function WindMap({ facilities, windData }: Props) {
 		init()
 	}, [windData])
 
-	// Facility markers
+	// Facility circles as MapLibre layer (renders below labels)
 	useEffect(() => {
 		const map = mapRef.current
 		if (!map || !facilities) return
 
-		for (const m of markersRef.current) m.remove()
-		markersRef.current = []
+		const addFacilities = () => {
+			const geojson: GeoJSON.FeatureCollection = {
+				type: "FeatureCollection",
+				features: facilities.facilities
+					.filter((f) => f.lat && f.lng)
+					.map((f) => ({
+						type: "Feature",
+						geometry: { type: "Point", coordinates: [f.lng, f.lat] },
+						properties: {
+							code: f.code,
+							name: f.name,
+							region: f.region,
+							capacityFactor: f.capacityFactor,
+							totalCapacity: f.totalCapacity,
+							currentPower: f.currentPower,
+							active: f.active && f.currentPower > 0,
+							units: f.units.length,
+						},
+					})),
+			}
 
-		for (const f of facilities.facilities) {
-			if (!f.lat || !f.lng) continue
+			// Clean up previous
+			try {
+				if (map.getLayer("facilities")) map.removeLayer("facilities")
+				if (map.getLayer("facilities-stroke")) map.removeLayer("facilities-stroke")
+				if (map.getSource("facilities")) map.removeSource("facilities")
+			} catch (_) {}
 
-			const color = capacityFactorColor(f.capacityFactor)
-			const active = f.active && f.currentPower > 0
-			const size = Math.max(8, Math.min(28, 6 + Math.sqrt(f.totalCapacity) * 0.5))
-			const localWind = windData && windGrid ? getWindAt(windData, windGrid, f.lng, f.lat) : null
+			map.addSource("facilities", { type: "geojson", data: geojson })
 
-			const el = createMarkerElement(size, color, active)
+			// Find first symbol layer to insert below labels
+			const layers = map.getStyle().layers
+			let labelLayerId: string | undefined
+			for (const layer of layers) {
+				if (layer.type === "symbol") {
+					labelLayerId = layer.id
+					break
+				}
+			}
 
-			const popup = new maplibregl.Popup({
-				closeButton: true,
-				maxWidth: "260px",
-				offset: size / 2 + 4,
-			}).setHTML(buildPopupHTML(f, localWind))
+			// Stroke layer (dark outline)
+			map.addLayer(
+				{
+					id: "facilities-stroke",
+					type: "circle",
+					source: "facilities",
+					paint: {
+						"circle-radius": [
+							"interpolate", ["linear"], ["get", "totalCapacity"],
+							10, 5, 100, 7, 500, 10, 1500, 14,
+						],
+						"circle-color": "rgba(0,0,0,0.4)",
+						"circle-translate": [0, 0],
+					},
+				},
+				labelLayerId,
+			)
 
-			const marker = new maplibregl.Marker({ element: el, anchor: "center" })
-				.setLngLat([f.lng, f.lat])
-				.setPopup(popup)
-				.addTo(map)
+			// Fill layer
+			map.addLayer(
+				{
+					id: "facilities",
+					type: "circle",
+					source: "facilities",
+					paint: {
+						"circle-radius": [
+							"interpolate", ["linear"], ["get", "totalCapacity"],
+							10, 4, 100, 6, 500, 9, 1500, 13,
+						],
+						"circle-color": capacityFactorExpression() as any,
+						"circle-stroke-width": 1.5,
+						"circle-stroke-color": "rgba(0,0,0,0.3)",
+					},
+				},
+				labelLayerId,
+			)
 
-			markersRef.current.push(marker)
+			// Pointer cursor
+			map.on("mouseenter", "facilities", () => { map.getCanvas().style.cursor = "pointer" })
+			map.on("mouseleave", "facilities", () => { map.getCanvas().style.cursor = "" })
+
+			// Click popup
+			map.on("click", "facilities", (e) => {
+				const feat = e.features?.[0]
+				if (!feat || feat.geometry.type !== "Point") return
+				const props = feat.properties
+				const f = facilities.facilities.find((fac) => fac.code === props.code)
+				if (!f) return
+
+				const localWind = windData && windGrid ? getWindAt(windData, windGrid, f.lng, f.lat) : null
+
+				popupRef.current?.remove()
+				popupRef.current = new maplibregl.Popup({ closeButton: true, maxWidth: "260px", offset: 10 })
+					.setLngLat([f.lng, f.lat])
+					.setHTML(buildPopupHTML(f, localWind))
+					.addTo(map)
+			})
+		}
+
+		if (map.isStyleLoaded()) {
+			addFacilities()
+		} else {
+			map.once("style.load", addFacilities)
 		}
 	}, [facilities, windData, windGrid])
 
@@ -175,27 +235,6 @@ function getWindAt(wd: WindData, grid: ImageData, lng: number, lat: number): Loc
 	return { speed, direction, cardinal }
 }
 
-function createMarkerElement(size: number, color: string, active: boolean): HTMLDivElement {
-	// Outer wrapper — MapLibre controls its transform, so we don't touch it
-	const el = document.createElement("div")
-	el.style.cssText = `cursor:pointer;`
-
-	// Inner dot — safe to transform for hover
-	const dot = document.createElement("div")
-	dot.style.cssText = `width:${size}px;height:${size}px;border-radius:50%;background:${color};border:1px solid ${active ? "rgba(255,255,255,0.6)" : "rgba(255,255,255,0.2)"};transition:transform 0.15s,box-shadow 0.15s;${active ? `box-shadow:0 0 ${size * 0.5}px ${color}50;` : ""}`
-	el.appendChild(dot)
-
-	el.addEventListener("mouseenter", () => {
-		dot.style.transform = "scale(1.3)"
-		dot.style.boxShadow = `0 0 12px ${color}`
-	})
-	el.addEventListener("mouseleave", () => {
-		dot.style.transform = ""
-		dot.style.boxShadow = active ? `0 0 ${size * 0.5}px ${color}50` : ""
-	})
-
-	return el
-}
 
 function buildPopupHTML(f: WindFacilityData["facilities"][0], wind: LocalWind | null): string {
 	const cfColor = capacityFactorColor(f.capacityFactor)
