@@ -1,4 +1,4 @@
-export interface WindUnit {
+export interface FacilityUnit {
 	code: string
 	capacity: number
 	currentPower: number
@@ -7,21 +7,21 @@ export interface WindUnit {
 	lastSeen: string
 }
 
-export interface WindFacility {
+export interface Facility {
 	code: string
 	name: string
 	region: string
 	lat: number
 	lng: number
-	units: WindUnit[]
+	units: FacilityUnit[]
 	totalCapacity: number
 	currentPower: number
 	capacityFactor: number
 	active: boolean
 }
 
-export interface WindFacilityData {
-	facilities: WindFacility[]
+export interface FacilityData {
+	facilities: Facility[]
 	lastUpdated: string
 	totalCapacity: number
 	totalPower: number
@@ -48,4 +48,32 @@ export interface WindFieldMeta {
 	/** GFS forecast timestamp */
 	timestamp: string
 	lastUpdated: string
+}
+
+export interface WindFieldData {
+	image: string
+	width: number
+	height: number
+	uMin: number
+	uMax: number
+	vMin: number
+	vMax: number
+	bbox: [number, number, number, number]
+}
+
+export interface SolarFieldData {
+	image: string
+	width: number
+	height: number
+	bbox: [number, number, number, number]
+	timestamp: string
+}
+
+export type FieldData = WindFieldData | SolarFieldData
+
+export interface FieldRenderer {
+	setData(data: FieldData): Promise<void>
+	start(): void
+	stop(): void
+	destroy(): void
 }

@@ -3,16 +3,7 @@
  * Particles flow along wind paths with speed-based coloring and smooth trails.
  */
 
-export interface WindData {
-	image: string
-	width: number
-	height: number
-	uMin: number
-	uMax: number
-	vMin: number
-	vMax: number
-	bbox: [number, number, number, number] // [west, south, east, north]
-}
+import type { FieldData, FieldRenderer, WindFieldData } from "./types"
 
 interface Particle {
 	lng: number
@@ -39,23 +30,13 @@ const SPEED_COLORS = [
 	[255, 60, 180], // 30+ m/s — hot pink (extreme)
 ]
 
-function speedColor(speed: number): string {
-	const t = Math.min(speed / 30, 1) * (SPEED_COLORS.length - 1)
-	const i = Math.floor(t)
-	const f = t - i
-	const a = SPEED_COLORS[Math.min(i, SPEED_COLORS.length - 1)]
-	const b = SPEED_COLORS[Math.min(i + 1, SPEED_COLORS.length - 1)]
-	const r = Math.round(a[0] + (b[0] - a[0]) * f)
-	const g = Math.round(a[1] + (b[1] - a[1]) * f)
-	const bl = Math.round(a[2] + (b[2] - a[2]) * f)
-	return `rgb(${r},${g},${bl})`
-}
+export { SPEED_COLORS }
 
-export class WindParticleRenderer {
+export class WindParticleRenderer implements FieldRenderer {
 	private canvas: HTMLCanvasElement
 	private ctx: CanvasRenderingContext2D
 	private map: any
-	private windData: WindData | null = null
+	private windData: WindFieldData | null = null
 	private windImage: ImageData | null = null
 	private particles: Particle[] = []
 	private animId: number | null = null
@@ -102,22 +83,23 @@ export class WindParticleRenderer {
 		this.canvas.height = el.clientHeight
 	}
 
-	async setWindData(data: WindData) {
-		this.windData = data
+	async setData(data: FieldData) {
+		const wd = data as WindFieldData
+		this.windData = wd
 
 		const img = new Image()
 		await new Promise<void>((resolve, reject) => {
 			img.onload = () => resolve()
 			img.onerror = reject
-			img.src = data.image
+			img.src = wd.image
 		})
 
 		const c = document.createElement("canvas")
-		c.width = data.width
-		c.height = data.height
+		c.width = wd.width
+		c.height = wd.height
 		const cx = c.getContext("2d")!
 		cx.drawImage(img, 0, 0)
-		this.windImage = cx.getImageData(0, 0, data.width, data.height)
+		this.windImage = cx.getImageData(0, 0, wd.width, wd.height)
 
 		this.particles = []
 		for (let i = 0; i < this.targetParticleCount(); i++) {

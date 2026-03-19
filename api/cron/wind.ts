@@ -8,10 +8,17 @@ const LON_STEPS = 20
 const LAT_STEPS = 15
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+	// Skip on solar-only deployments
+	if (process.env.VITE_MODE === "solar") {
+		return res.json({ ok: true, skipped: true })
+	}
+
 	const auth = req.headers.authorization
 	if (process.env.CRON_SECRET && auth !== `Bearer ${process.env.CRON_SECRET}`) {
 		return res.status(401).json({ error: "Unauthorized" })
 	}
+
+	const blobPrefix = process.env.BLOB_PREFIX || "windwatch"
 
 	try {
 		// Build grid
@@ -98,11 +105,15 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 			width: LON_STEPS,
 		}
 
-		const { url } = await put("windwatch/wind.json", JSON.stringify(windData), {
-			access: "public",
-			addRandomSuffix: false,
-			contentType: "application/json",
-		})
+		const { url } = await put(
+			`${blobPrefix}/wind.json`,
+			JSON.stringify(windData),
+			{
+				access: "public",
+				addRandomSuffix: false,
+				contentType: "application/json",
+			}
+		)
 
 		return res.json({ grid: `${LON_STEPS}x${LAT_STEPS}`, ok: true, url })
 	} catch (error) {

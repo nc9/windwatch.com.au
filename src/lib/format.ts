@@ -21,3 +21,7 @@ export function formatMW(mw: number): string {
 export function formatPercent(value: number): string {
 	return `${Math.round(value)}%`
 }
+
+export function formatWm2(v: number): string {
+	return `${Math.round(v)} W/m\u00B2`
+}
