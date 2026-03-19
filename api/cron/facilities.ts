@@ -13,10 +13,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 		const client = new OpenElectricityClient()
 
 		// Fetch from both NEM and WEM
+		const fueltech = process.env.FUELTECH || "wind"
+		const blobPrefix = process.env.BLOB_PREFIX || "windwatch"
+
 		const allFacilities: any[] = []
 		for (const network of ["NEM", "WEM"]) {
 			const { response } = await client.getFacilities({
-				fueltech_id: ["wind"],
+				fueltech_id: [fueltech],
 				network_id: [network],
 				status_id: ["operating"],
 			})
@@ -132,7 +135,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 		}
 
 		const { url } = await put(
-			"windwatch/facilities.json",
+			`${blobPrefix}/${fueltech}-facilities.json`,
 			JSON.stringify(data),
 			{
 				access: "public",

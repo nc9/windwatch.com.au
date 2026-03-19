@@ -1,0 +1,2668 @@
+{
+	"aggregateCapacityFactor": 31.6,
+	"facilities": [
+		{
+			"active": true,
+			"capacityFactor": 17.7,
+			"code": "ADP",
+			"currentPower": 4.377,
+			"lat": -35.096948,
+			"lng": 138.484061,
+			"name": "Adelaide Desalination",
+			"network": "NEM",
+			"region": "SA1",
+			"totalCapacity": 24.75,
+			"units": [
+				{
+					"active": true,
+					"capacity": 24.75,
+					"capacityFactor": 17.7,
+					"code": "ADPPV1",
+					"currentPower": 4.377,
+					"lastSeen": "2026-03-19T15:30:00+08:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 0.4,
+			"code": "ALDGASF",
+			"currentPower": 2.0048,
+			"lat": -23.839544,
+			"lng": 151.0849,
+			"name": "Aldoga",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 535.21,
+			"units": [
+				{
+					"active": true,
+					"capacity": 535.21,
+					"capacityFactor": 0.4,
+					"code": "ALDGASF1",
+					"currentPower": 2.0048,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 33.6,
+			"code": "AVLSF",
+			"currentPower": 85.2934,
+			"lat": -34.919115,
+			"lng": 146.60954,
+			"name": "Avonlie",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 254.1,
+			"units": [
+				{
+					"active": true,
+					"capacity": 254.1,
+					"capacityFactor": 33.6,
+					"code": "AVLSF1",
+					"currentPower": 85.2934,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 38.5,
+			"code": "BANNSP",
+			"currentPower": 38.46,
+			"lat": -34.67263,
+			"lng": 142.750362,
+			"name": "Bannerton",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 100,
+			"units": [
+				{
+					"active": true,
+					"capacity": 100,
+					"capacityFactor": 38.5,
+					"code": "BANN1",
+					"currentPower": 38.46,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 71,
+			"code": "BARCSF",
+			"currentPower": 14.2,
+			"lat": -23.547333,
+			"lng": 145.318972,
+			"name": "Barcaldine",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 20,
+			"units": [
+				{
+					"active": true,
+					"capacity": 20,
+					"capacityFactor": 71,
+					"code": "BARCSF1",
+					"currentPower": 14.2,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 9.7,
+			"code": "BERYLSF",
+			"currentPower": 9.5304,
+			"lat": -32.347501,
+			"lng": 149.460738,
+			"name": "Beryl",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 98,
+			"units": [
+				{
+					"active": true,
+					"capacity": 98,
+					"capacityFactor": 9.7,
+					"code": "BERYLSF1",
+					"currentPower": 9.5304,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 36.9,
+			"code": "BLUEGSF",
+			"currentPower": 67.4976,
+			"lat": -26.691708,
+			"lng": 150.500037,
+			"name": "Blue Grass",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 183,
+			"units": [
+				{
+					"active": true,
+					"capacity": 183,
+					"capacityFactor": 36.9,
+					"code": "BLUEGSF1",
+					"currentPower": 67.4976,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "BOLIVAR",
+			"currentPower": 0,
+			"lat": -34.495482,
+			"lng": 138.387641,
+			"name": "Bolivar",
+			"network": "NEM",
+			"region": "SA1",
+			"totalCapacity": 8.25,
+			"units": [
+				{
+					"active": true,
+					"capacity": 8.25,
+					"capacityFactor": 0,
+					"code": "BOWWPV1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-19T15:00:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "BOMENSF",
+			"currentPower": 0,
+			"lat": -35.0486,
+			"lng": 147.4439,
+			"name": "Bomen",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 121,
+			"units": [
+				{
+					"active": true,
+					"capacity": 121,
+					"capacityFactor": 0,
+					"code": "BOMENSF1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-18T18:15:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 3,
+			"code": "BRDD",
+			"currentPower": 10.9363,
+			"lat": -22.810001,
+			"lng": 149.36302,
+			"name": "Broadsound",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 368,
+			"units": [
+				{
+					"active": true,
+					"capacity": 368,
+					"capacityFactor": 3,
+					"code": "BRDDSF01",
+					"currentPower": 10.9363,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 94.7,
+			"code": "BROKENH",
+			"currentPower": 50.1992,
+			"lat": -31.988905,
+			"lng": 141.391547,
+			"name": "Broken Hill",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 53,
+			"units": [
+				{
+					"active": true,
+					"capacity": 53,
+					"capacityFactor": 94.7,
+					"code": "BROKENH1",
+					"currentPower": 50.1992,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 10.1,
+			"code": "BUSF",
+			"currentPower": 10.19,
+			"lat": -24.943515,
+			"lng": 152.020698,
+			"name": "Bundaberg",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 101,
+			"units": [
+				{
+					"active": true,
+					"capacity": 101,
+					"capacityFactor": 10.1,
+					"code": "BUSF1",
+					"currentPower": 10.19,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "BNGSF1",
+			"currentPower": 0,
+			"lat": -32.423316,
+			"lng": 137.841798,
+			"name": "Bungala One",
+			"network": "NEM",
+			"region": "SA1",
+			"totalCapacity": 135,
+			"units": [
+				{
+					"active": true,
+					"capacity": 135,
+					"capacityFactor": 0,
+					"code": "BNGSF1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-09T17:10:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 17.8,
+			"code": "BNGSF2",
+			"currentPower": 23.98,
+			"lat": -32.406993,
+			"lng": 137.840933,
+			"name": "Bungala Two",
+			"network": "NEM",
+			"region": "SA1",
+			"totalCapacity": 135,
+			"units": [
+				{
+					"active": true,
+					"capacity": 135,
+					"capacityFactor": 17.8,
+					"code": "BNGSF2",
+					"currentPower": 23.98,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 72.3,
+			"code": "CRWARP",
+			"currentPower": 134.41,
+			"lat": -34.454955,
+			"lng": 142.15808,
+			"name": "Carwarp",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 186,
+			"units": [
+				{
+					"active": true,
+					"capacity": 186,
+					"capacityFactor": 72.3,
+					"code": "CRWARP1",
+					"currentPower": 134.41,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 19.4,
+			"code": "CHILDSF",
+			"currentPower": 12.5,
+			"lat": -25.295027,
+			"lng": 152.403674,
+			"name": "Childers",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 64.38,
+			"units": [
+				{
+					"active": true,
+					"capacity": 64.38,
+					"capacityFactor": 19.4,
+					"code": "CHILDSF1",
+					"currentPower": 12.5,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 24.3,
+			"code": "CLARESF",
+			"currentPower": 26.838,
+			"lat": -19.83977,
+			"lng": 147.21055,
+			"name": "Clare",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 110.26,
+			"units": [
+				{
+					"active": true,
+					"capacity": 110.26,
+					"capacityFactor": 24.3,
+					"code": "CLARESF1",
+					"currentPower": 26.838,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 15.9,
+			"code": "CLERMSF",
+			"currentPower": 14.6,
+			"lat": -22.839406,
+			"lng": 147.546031,
+			"name": "Clermont",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 92,
+			"units": [
+				{
+					"active": true,
+					"capacity": 92,
+					"capacityFactor": 15.9,
+					"code": "CLERMSF1",
+					"currentPower": 14.6,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 68.8,
+			"code": "COHUNSF1",
+			"currentPower": 21.39,
+			"lat": -35.880317,
+			"lng": 144.221531,
+			"name": "Cohuna",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 31.1,
+			"units": [
+				{
+					"active": true,
+					"capacity": 31.1,
+					"capacityFactor": 68.8,
+					"code": "COHUNSF1",
+					"currentPower": 21.39,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 67.2,
+			"code": "COLEASF",
+			"currentPower": 120.9991,
+			"lat": -34.759494,
+			"lng": 145.92984,
+			"name": "Coleambally",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 180,
+			"units": [
+				{
+					"active": true,
+					"capacity": 180,
+					"capacityFactor": 67.2,
+					"code": "COLEASF1",
+					"currentPower": 120.9991,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 40.2,
+			"code": "CSPVPS",
+			"currentPower": 16.9,
+			"lat": -20.55714,
+			"lng": 147.820552,
+			"name": "Collinsville",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 42,
+			"units": [
+				{
+					"active": true,
+					"capacity": 42,
+					"capacityFactor": 40.2,
+					"code": "CSPVPS1",
+					"currentPower": 16.9,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 74.6,
+			"code": "COLUMSF",
+			"currentPower": 161.985,
+			"lat": -26.636088,
+			"lng": 150.28221,
+			"name": "Columboola",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 217,
+			"units": [
+				{
+					"active": true,
+					"capacity": 217,
+					"capacityFactor": 74.6,
+					"code": "COLUMSF1",
+					"currentPower": 161.985,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 36.3,
+			"code": "CRWASF1",
+			"currentPower": 13.0621,
+			"lat": -35.98629,
+			"lng": 146.361456,
+			"name": "Corowa",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 36,
+			"units": [
+				{
+					"active": true,
+					"capacity": 36,
+					"capacityFactor": 36.3,
+					"code": "CRWASF1",
+					"currentPower": 13.0621,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 49.1,
+			"code": "CULCSF",
+			"currentPower": 228.8614,
+			"lat": -35.709592,
+			"lng": 146.981761,
+			"name": "Culcairn",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 466,
+			"units": [
+				{
+					"active": true,
+					"capacity": 466,
+					"capacityFactor": 49.1,
+					"code": "CUSF1",
+					"currentPower": 228.8614,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 24.5,
+			"code": "DDSF",
+			"currentPower": 29.7042,
+			"lat": -27.112,
+			"lng": 150.8819,
+			"name": "Darling Downs",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 121,
+			"units": [
+				{
+					"active": true,
+					"capacity": 121,
+					"capacityFactor": 24.5,
+					"code": "DDSF1",
+					"currentPower": 29.7042,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 19.1,
+			"code": "DARLSF",
+			"currentPower": 61.9845,
+			"lat": -34.644808,
+			"lng": 146.035756,
+			"name": "Darlington Point",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 324,
+			"units": [
+				{
+					"active": true,
+					"capacity": 324,
+					"capacityFactor": 19.1,
+					"code": "DARLSF1",
+					"currentPower": 61.9845,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 32.6,
+			"code": "DAYDSF",
+			"currentPower": 54.477,
+			"lat": -20.512804,
+			"lng": 147.691968,
+			"name": "Daydream",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 167,
+			"units": [
+				{
+					"active": true,
+					"capacity": 167,
+					"capacityFactor": 32.6,
+					"code": "DAYDSF1",
+					"currentPower": 54.477,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 53.5,
+			"code": "EDENVSF",
+			"currentPower": 96.258,
+			"lat": -26.947486,
+			"lng": 150.578494,
+			"name": "Edenvale",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 180,
+			"units": [
+				{
+					"active": true,
+					"capacity": 180,
+					"capacityFactor": 53.5,
+					"code": "EDENVSF1",
+					"currentPower": 96.258,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 48.6,
+			"code": "EMERASF",
+			"currentPower": 42.8,
+			"lat": -23.50879,
+			"lng": 148.128017,
+			"name": "Emerald",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 88,
+			"units": [
+				{
+					"active": true,
+					"capacity": 88,
+					"capacityFactor": 48.6,
+					"code": "EMERASF1",
+					"currentPower": 42.8,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 39.2,
+			"code": "FINLEYSF",
+			"currentPower": 63.6454,
+			"lat": -35.64421,
+			"lng": 145.508644,
+			"name": "Finley",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 162.36,
+			"units": [
+				{
+					"active": true,
+					"capacity": 162.36,
+					"capacityFactor": 39.2,
+					"code": "FINLYSF1",
+					"currentPower": 63.6454,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "GANGARR",
+			"currentPower": 0,
+			"lat": -26.254813,
+			"lng": 149.986704,
+			"name": "Gangarri",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 162,
+			"units": [
+				{
+					"active": true,
+					"capacity": 162,
+					"capacityFactor": 0,
+					"code": "GANGARR1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-16T18:00:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 77.6,
+			"code": "GANNSF",
+			"currentPower": 42.7,
+			"lat": -35.73,
+			"lng": 143.7711,
+			"name": "Gannawarra",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 55,
+			"units": [
+				{
+					"active": true,
+					"capacity": 55,
+					"capacityFactor": 77.6,
+					"code": "GANNSF1",
+					"currentPower": 42.7,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 81.5,
+			"code": "GIRGSF",
+			"currentPower": 76.09,
+			"lat": -36.426125,
+			"lng": 144.922155,
+			"name": "Girgarre",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 93.31,
+			"units": [
+				{
+					"active": true,
+					"capacity": 93.31,
+					"capacityFactor": 81.5,
+					"code": "GIRGSF",
+					"currentPower": 76.09,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "GESF",
+			"currentPower": 0,
+			"lat": -35.929882,
+			"lng": 146.909107,
+			"name": "Glenellen",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 264,
+			"units": [
+				{
+					"active": true,
+					"capacity": 264,
+					"capacityFactor": 0,
+					"code": "GESF1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-03T14:35:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 71.3,
+			"code": "GLENSF",
+			"currentPower": 89.87,
+			"lat": -36.464,
+			"lng": 146.221,
+			"name": "Glenrowan",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 126,
+			"units": [
+				{
+					"active": true,
+					"capacity": 126,
+					"capacityFactor": 71.3,
+					"code": "GLENSF1",
+					"currentPower": 89.87,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 67.1,
+			"code": "GLRWNSF",
+			"currentPower": 88.57,
+			"lat": -36.488083,
+			"lng": 146.146887,
+			"name": "Glenrowan West",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 132,
+			"units": [
+				{
+					"active": true,
+					"capacity": 132,
+					"capacityFactor": 67.1,
+					"code": "GLRWNSF1",
+					"currentPower": 88.57,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 17.9,
+			"code": "GOONUMSF",
+			"currentPower": 15.1821,
+			"lat": -33.106413,
+			"lng": 148.099274,
+			"name": "Goonumbla",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 85,
+			"units": [
+				{
+					"active": true,
+					"capacity": 85,
+					"capacityFactor": 17.9,
+					"code": "GOONSF1",
+					"currentPower": 15.1821,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 63.6,
+			"code": "GOESF1",
+			"currentPower": 221.67,
+			"lat": -36.427352,
+			"lng": 145.918853,
+			"name": "Goorambat East",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 348.6,
+			"units": [
+				{
+					"active": true,
+					"capacity": 348.6,
+					"capacityFactor": 63.6,
+					"code": "GOESF1",
+					"currentPower": 221.67,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 26.5,
+			"code": "GRIFSF",
+			"currentPower": 7.2007,
+			"lat": -34.317414,
+			"lng": 146.120739,
+			"name": "Griffith",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 27.2,
+			"units": [
+				{
+					"active": true,
+					"capacity": 27.2,
+					"capacityFactor": 26.5,
+					"code": "GRIFSF1",
+					"currentPower": 7.2007,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 17.3,
+			"code": "GULLRGWF",
+			"currentPower": 1.725,
+			"lat": -34.624512,
+			"lng": 149.458549,
+			"name": "Gullen Range",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 10,
+			"units": [
+				{
+					"active": true,
+					"capacity": 10,
+					"capacityFactor": 17.3,
+					"code": "GULLRSF1",
+					"currentPower": 1.725,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 15.8,
+			"code": "GNNDHSF",
+			"currentPower": 22.7679,
+			"lat": -30.965469,
+			"lng": 150.367917,
+			"name": "Gunnedah",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 144,
+			"units": [
+				{
+					"active": true,
+					"capacity": 144,
+					"capacityFactor": 15.8,
+					"code": "GNNDHSF1",
+					"currentPower": 22.7679,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 3.6,
+			"code": "GUSF",
+			"currentPower": 4.36,
+			"lat": -28.408388,
+			"lng": 150.343437,
+			"name": "Gunsynd",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 122.78,
+			"units": [
+				{
+					"active": true,
+					"capacity": 122.78,
+					"capacityFactor": 3.6,
+					"code": "GUSF1",
+					"currentPower": 4.36,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 30.6,
+			"code": "HAMISF",
+			"currentPower": 17.6,
+			"lat": -20.468593,
+			"lng": 147.799484,
+			"name": "Hamilton",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 57.5,
+			"units": [
+				{
+					"active": true,
+					"capacity": 57.5,
+					"capacityFactor": 30.6,
+					"code": "HAMISF1",
+					"currentPower": 17.6,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 35.1,
+			"code": "HVWW",
+			"currentPower": 3.863,
+			"lat": -35.063118,
+			"lng": 138.56476,
+			"name": "Happy Valley",
+			"network": "NEM",
+			"region": "SA1",
+			"totalCapacity": 11,
+			"units": [
+				{
+					"active": true,
+					"capacity": 11,
+					"capacityFactor": 35.1,
+					"code": "HVWWPV1",
+					"currentPower": 3.863,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 31.3,
+			"code": "HAUGHT1",
+			"currentPower": 41.3205,
+			"lat": -19.732168,
+			"lng": 147.076137,
+			"name": "Haughton",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 132,
+			"units": [
+				{
+					"active": true,
+					"capacity": 132,
+					"capacityFactor": 31.3,
+					"code": "HAUGHT11",
+					"currentPower": 41.3205,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 29.4,
+			"code": "HAYMSF",
+			"currentPower": 16.954,
+			"lat": -20.487516,
+			"lng": 147.744778,
+			"name": "Hayman",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 57.75,
+			"units": [
+				{
+					"active": true,
+					"capacity": 57.75,
+					"capacityFactor": 29.4,
+					"code": "HAYMSF1",
+					"currentPower": 16.954,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 60.1,
+			"code": "HILLSTN",
+			"currentPower": 66.1647,
+			"lat": -33.532991,
+			"lng": 145.522279,
+			"name": "Hillston Sun",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 110,
+			"units": [
+				{
+					"active": true,
+					"capacity": 110,
+					"capacityFactor": 60.1,
+					"code": "HILLSTN1",
+					"currentPower": 66.1647,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 57.2,
+			"code": "HUGSF",
+			"currentPower": 12,
+			"lat": -20.854794,
+			"lng": 144.186048,
+			"name": "Hughenden",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 20.97,
+			"units": [
+				{
+					"active": true,
+					"capacity": 20.97,
+					"capacityFactor": 57.2,
+					"code": "HUGSF1",
+					"currentPower": 12,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 55.2,
+			"code": "JEMALNG1",
+			"currentPower": 30.37,
+			"lat": -33.388764,
+			"lng": 147.669375,
+			"name": "Jemalong",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 55,
+			"units": [
+				{
+					"active": true,
+					"capacity": 55,
+					"capacityFactor": 55.2,
+					"code": "JEMALNG1",
+					"currentPower": 30.37,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 9.6,
+			"code": "JUNEESF",
+			"currentPower": 3.449,
+			"lat": -34.81124,
+			"lng": 147.572099,
+			"name": "Junee",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 36,
+			"units": [
+				{
+					"active": true,
+					"capacity": 36,
+					"capacityFactor": 9.6,
+					"code": "JUNEESF1",
+					"currentPower": 3.449,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 29.4,
+			"code": "KARSF",
+			"currentPower": 30.6,
+			"lat": -34.416199,
+			"lng": 142.252181,
+			"name": "Karadoc",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 104,
+			"units": [
+				{
+					"active": true,
+					"capacity": 104,
+					"capacityFactor": 29.4,
+					"code": "KARSF1",
+					"currentPower": 30.6,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "KENNEDY",
+			"currentPower": 0,
+			"lat": -20.872792,
+			"lng": 144.413034,
+			"name": "Kennedy Energy Park",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 16,
+			"units": [
+				{
+					"active": true,
+					"capacity": 16,
+					"capacityFactor": 0,
+					"code": "KEPSF1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 66.6,
+			"code": "KERNGSP",
+			"currentPower": 24.65,
+			"lat": -35.779895,
+			"lng": 143.941051,
+			"name": "Kerang",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 37,
+			"units": [
+				{
+					"active": true,
+					"capacity": 37,
+					"capacityFactor": 66.6,
+					"code": "KERNGSP1",
+					"currentPower": 24.65,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 80.8,
+			"code": "KIAMSF1",
+			"currentPower": 193.0381,
+			"lat": -35.018133,
+			"lng": 142.302953,
+			"name": "Kiamal",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 239,
+			"units": [
+				{
+					"active": true,
+					"capacity": 239,
+					"capacityFactor": 80.8,
+					"code": "KIAMSF1",
+					"currentPower": 193.0381,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 39.8,
+			"code": "KSP1",
+			"currentPower": 19.9,
+			"lat": -18.88,
+			"lng": 144.151,
+			"name": "Kidston",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 50,
+			"units": [
+				{
+					"active": true,
+					"capacity": 50,
+					"capacityFactor": 39.8,
+					"code": "KSP1",
+					"currentPower": 19.9,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 40.2,
+			"code": "KINGASF",
+			"currentPower": 18.9,
+			"lat": -26.537087,
+			"lng": 151.890398,
+			"name": "Kingaroy",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 47,
+			"units": [
+				{
+					"active": true,
+					"capacity": 47,
+					"capacityFactor": 40.2,
+					"code": "KINGASF1",
+					"currentPower": 18.9,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 20.9,
+			"code": "LILYVASF",
+			"currentPower": 24.6415,
+			"lat": -23.070504,
+			"lng": 148.413865,
+			"name": "Lilyvale",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 118,
+			"units": [
+				{
+					"active": true,
+					"capacity": 118,
+					"capacityFactor": 20.9,
+					"code": "LILYSF1",
+					"currentPower": 24.6415,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 22,
+			"code": "LIMOSF1",
+			"currentPower": 60.5415,
+			"lat": -34.775502,
+			"lng": 143.508046,
+			"name": "Limondale",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 275,
+			"units": [
+				{
+					"active": true,
+					"capacity": 275,
+					"capacityFactor": 22,
+					"code": "LIMOSF11",
+					"currentPower": 60.5415,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 12.2,
+			"code": "LIMOSF2",
+			"currentPower": 4.6225,
+			"lat": -34.775502,
+			"lng": 143.508046,
+			"name": "Limondale 2",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 38,
+			"units": [
+				{
+					"active": true,
+					"capacity": 38,
+					"capacityFactor": 12.2,
+					"code": "LIMOSF21",
+					"currentPower": 4.6225,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 76.5,
+			"code": "LRSF",
+			"currentPower": 13,
+			"lat": -23.455048,
+			"lng": 144.227917,
+			"name": "Longreach",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 17,
+			"units": [
+				{
+					"active": true,
+					"capacity": 17,
+					"capacityFactor": 76.5,
+					"code": "LRSF1",
+					"currentPower": 13,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 80.7,
+			"code": "MANSLR",
+			"currentPower": 40.371,
+			"lat": -33.172831,
+			"lng": 148.71824,
+			"name": "Manildra",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 50,
+			"units": [
+				{
+					"active": true,
+					"capacity": 50,
+					"capacityFactor": 80.7,
+					"code": "MANSLR1",
+					"currentPower": 40.371,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 47.9,
+			"code": "MANNSF",
+			"currentPower": 17.73,
+			"lat": -34.9144,
+			"lng": 139.2681,
+			"name": "Mannum 2",
+			"network": "NEM",
+			"region": "SA1",
+			"totalCapacity": 37,
+			"units": [
+				{
+					"active": true,
+					"capacity": 37,
+					"capacityFactor": 47.9,
+					"code": "MANNSF2",
+					"currentPower": 17.73,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "MAPS2",
+			"currentPower": 0,
+			"lat": -34.920217,
+			"lng": 139.314438,
+			"name": "Mannum Pumping Station",
+			"network": "NEM",
+			"region": "SA1",
+			"totalCapacity": 33,
+			"units": [
+				{
+					"active": true,
+					"capacity": 16.5,
+					"capacityFactor": 0,
+					"code": "MAPS2PV1",
+					"currentPower": 0,
+					"lastSeen": "2026-02-20T10:35:00+10:00"
+				},
+				{
+					"active": true,
+					"capacity": 16.5,
+					"capacityFactor": 0,
+					"code": "MAPS3PV1",
+					"currentPower": 0,
+					"lastSeen": "2026-01-16T14:55:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 29.7,
+			"code": "MARYRSF",
+			"currentPower": 9.8,
+			"lat": -27.708973,
+			"lng": 151.546869,
+			"name": "Maryrorough",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 33,
+			"units": [
+				{
+					"active": true,
+					"capacity": 33,
+					"capacityFactor": 29.7,
+					"code": "MARYRSF1",
+					"currentPower": 9.8,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 5.8,
+			"code": "METZSF",
+			"currentPower": 7.8202,
+			"lat": -30.4915,
+			"lng": 151.6701,
+			"name": "Metz N",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 135,
+			"units": [
+				{
+					"active": true,
+					"capacity": 135,
+					"capacityFactor": 5.8,
+					"code": "METZSF1",
+					"currentPower": 7.8202,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 33.3,
+			"code": "MIDDLSF1",
+			"currentPower": 10,
+			"lat": -22.822235,
+			"lng": 148.720115,
+			"name": "Middlemount",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 30,
+			"units": [
+				{
+					"active": true,
+					"capacity": 30,
+					"capacityFactor": 33.3,
+					"code": "MIDDLSF1",
+					"currentPower": 10,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 49.2,
+			"code": "MOKOSF",
+			"currentPower": 28.54,
+			"lat": -36.487519,
+			"lng": 146.122634,
+			"name": "Mokoan",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 58,
+			"units": [
+				{
+					"active": true,
+					"capacity": 58,
+					"capacityFactor": 49.2,
+					"code": "MOKOSF1",
+					"currentPower": 28.54,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 49.5,
+			"code": "MOLNGSF1",
+			"currentPower": 17.8262,
+			"lat": -33.082578,
+			"lng": 148.900073,
+			"name": "Molong",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 36,
+			"units": [
+				{
+					"active": true,
+					"capacity": 36,
+					"capacityFactor": 49.5,
+					"code": "MOLNGSF1",
+					"currentPower": 17.8262,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 3.5,
+			"code": "MOREESF",
+			"currentPower": 1.994,
+			"lat": -29.572607,
+			"lng": 149.861266,
+			"name": "Moree",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 57,
+			"units": [
+				{
+					"active": true,
+					"capacity": 57,
+					"capacityFactor": 3.5,
+					"code": "MOREESF1",
+					"currentPower": 1.994,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 18.9,
+			"code": "MWPS",
+			"currentPower": 4.16,
+			"lat": -33.97382,
+			"lng": 139.193756,
+			"name": "Morganwhyalla Pipeline",
+			"network": "NEM",
+			"region": "SA1",
+			"totalCapacity": 22,
+			"units": [
+				{
+					"active": true,
+					"capacity": 5,
+					"capacityFactor": 12.8,
+					"code": "MWPS4PV1",
+					"currentPower": 0.64,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				},
+				{
+					"active": true,
+					"capacity": 7,
+					"capacityFactor": 11.3,
+					"code": "MWPS3PV1",
+					"currentPower": 0.79,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				},
+				{
+					"active": true,
+					"capacity": 5,
+					"capacityFactor": 46.4,
+					"code": "MWPS1PV1",
+					"currentPower": 2.32,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				},
+				{
+					"active": true,
+					"capacity": 5,
+					"capacityFactor": 8.2,
+					"code": "MWPS2PV1",
+					"currentPower": 0.41,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 13.3,
+			"code": "MOUSF",
+			"currentPower": 13.1932,
+			"lat": -24.509628,
+			"lng": 150.076648,
+			"name": "Moura",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 99,
+			"units": [
+				{
+					"active": true,
+					"capacity": 99,
+					"capacityFactor": 13.3,
+					"code": "MOUSF1",
+					"currentPower": 13.1932,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 84,
+			"code": "MLSP",
+			"currentPower": 10.082,
+			"lat": -35.398441,
+			"lng": 149.14906,
+			"name": "Mugga Lane",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 12,
+			"units": [
+				{
+					"active": true,
+					"capacity": 12,
+					"capacityFactor": 84,
+					"code": "MLSP1",
+					"currentPower": 10.082,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 22.3,
+			"code": "MUCRKSF",
+			"currentPower": 34.32,
+			"lat": -25.882106,
+			"lng": 152.459626,
+			"name": "Munna Creek",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 154,
+			"units": [
+				{
+					"active": true,
+					"capacity": 154,
+					"capacityFactor": 22.3,
+					"code": "MUCRKSF1",
+					"currentPower": 34.32,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "MBPS2",
+			"currentPower": 0,
+			"lat": -35.094093,
+			"lng": 139.211511,
+			"name": "Murray Bridge-Onkaparinga",
+			"network": "NEM",
+			"region": "SA1",
+			"totalCapacity": 13.75,
+			"units": [
+				{
+					"active": true,
+					"capacity": 13.75,
+					"capacityFactor": 0,
+					"code": "MBPS2PV1",
+					"currentPower": 0,
+					"lastSeen": "2026-02-23T09:05:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 20.2,
+			"code": "NEVERSF",
+			"currentPower": 26.66,
+			"lat": -31.831044,
+			"lng": 147.705178,
+			"name": "Nevertire",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 132,
+			"units": [
+				{
+					"active": true,
+					"capacity": 132,
+					"capacityFactor": 20.2,
+					"code": "NEVERSF1",
+					"currentPower": 26.66,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 6,
+			"code": "NEWENSF",
+			"currentPower": 28.354300000000002,
+			"lat": -30.627323,
+			"lng": 151.556425,
+			"name": "New England",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 470,
+			"units": [
+				{
+					"active": true,
+					"capacity": 235,
+					"capacityFactor": 6.8,
+					"code": "NEWENSF2",
+					"currentPower": 15.9075,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				},
+				{
+					"active": true,
+					"capacity": 235,
+					"capacityFactor": 5.3,
+					"code": "NEWENSF1",
+					"currentPower": 12.4468,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 80.5,
+			"code": "NUMURKSF",
+			"currentPower": 90.15,
+			"lat": -36.159275,
+			"lng": 145.473891,
+			"name": "Numurkah",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 112,
+			"units": [
+				{
+					"active": true,
+					"capacity": 112,
+					"capacityFactor": 80.5,
+					"code": "NUMURSF1",
+					"currentPower": 90.15,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 65.4,
+			"code": "NYNGAN",
+			"currentPower": 66.75,
+			"lat": -31.563191,
+			"lng": 147.074195,
+			"name": "Nyngan",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 102.14,
+			"units": [
+				{
+					"active": true,
+					"capacity": 102.14,
+					"capacityFactor": 65.4,
+					"code": "NYNGAN1",
+					"currentPower": 66.75,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 82.8,
+			"code": "OAKEY2SF",
+			"currentPower": 53.8,
+			"lat": -27.402454,
+			"lng": 151.642576,
+			"name": "Oakey 2",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 65,
+			"units": [
+				{
+					"active": true,
+					"capacity": 65,
+					"capacityFactor": 82.8,
+					"code": "OAKEY2SF",
+					"currentPower": 53.8,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 81.7,
+			"code": "OAKEY1SF",
+			"currentPower": 24.5,
+			"lat": -27.402454,
+			"lng": 151.642576,
+			"name": "Oakey Solar Farm",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 30,
+			"units": [
+				{
+					"active": true,
+					"capacity": 30,
+					"capacityFactor": 81.7,
+					"code": "OAKEY1SF",
+					"currentPower": 24.5,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 73.8,
+			"code": "PSF",
+			"currentPower": 40.5997,
+			"lat": -33.113056,
+			"lng": 148.076372,
+			"name": "Parkes",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 55,
+			"units": [
+				{
+					"active": true,
+					"capacity": 55,
+					"capacityFactor": 73.8,
+					"code": "PARSF1",
+					"currentPower": 40.5997,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 15.2,
+			"code": "PAREPW",
+			"currentPower": 15.01,
+			"lat": -32.595609,
+			"lng": 137.885629,
+			"name": "Port Augusta Energy Park",
+			"network": "NEM",
+			"region": "SA1",
+			"totalCapacity": 99,
+			"units": [
+				{
+					"active": true,
+					"capacity": 99,
+					"capacityFactor": 15.2,
+					"code": "PAREPS1",
+					"currentPower": 15.01,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "QP",
+			"currentPower": 0,
+			"lat": -33.079517,
+			"lng": 148.089521,
+			"name": "Quorn Park",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 96,
+			"units": [
+				{
+					"active": true,
+					"capacity": 96,
+					"capacityFactor": 0,
+					"code": "QPSFB1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-19T08:35:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 39,
+			"code": "RRSF",
+			"currentPower": 49.8868,
+			"lat": -19.425305,
+			"lng": 146.715686,
+			"name": "Ross River",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 128,
+			"units": [
+				{
+					"active": true,
+					"capacity": 128,
+					"capacityFactor": 39,
+					"code": "RRSF1",
+					"currentPower": 49.8868,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 10.6,
+			"code": "ROYALLA",
+			"currentPower": 2.123,
+			"lat": -35.486052,
+			"lng": 149.141966,
+			"name": "Royalla",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 20,
+			"units": [
+				{
+					"active": true,
+					"capacity": 20,
+					"capacityFactor": 10.6,
+					"code": "ROYALLA1",
+					"currentPower": 2.123,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 17.2,
+			"code": "RUGBYR",
+			"currentPower": 14.3002,
+			"lat": -21.940469,
+			"lng": 147.880877,
+			"name": "Rugby Run",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 83,
+			"units": [
+				{
+					"active": true,
+					"capacity": 83,
+					"capacityFactor": 17.2,
+					"code": "RUGBYR1",
+					"currentPower": 14.3002,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 17.2,
+			"code": "SEBSF",
+			"currentPower": 18.8853,
+			"lat": -34.603287,
+			"lng": 147.554757,
+			"name": "Sebastopol",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 110,
+			"units": [
+				{
+					"active": true,
+					"capacity": 110,
+					"capacityFactor": 17.2,
+					"code": "SEBSF1",
+					"currentPower": 18.8853,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 34.6,
+			"code": "STUBSF",
+			"currentPower": 174.05630000000002,
+			"lat": -32.26254,
+			"lng": 149.589068,
+			"name": "Stubbo",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 503,
+			"units": [
+				{
+					"active": true,
+					"capacity": 255,
+					"capacityFactor": 35.5,
+					"code": "STUBSF1",
+					"currentPower": 90.6217,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				},
+				{
+					"active": true,
+					"capacity": 248,
+					"capacityFactor": 33.6,
+					"code": "STUBSF2",
+					"currentPower": 83.4346,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 22.6,
+			"code": "SMCSF",
+			"currentPower": 32.381,
+			"lat": -19.437318,
+			"lng": 146.696015,
+			"name": "Sun Metals",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 143,
+			"units": [
+				{
+					"active": true,
+					"capacity": 143,
+					"capacityFactor": 22.6,
+					"code": "SMCSF1",
+					"currentPower": 32.381,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 9.2,
+			"code": "SUNRSF1",
+			"currentPower": 21.0346,
+			"lat": -34.821489,
+			"lng": 143.50916,
+			"name": "Sunraysia",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 228,
+			"units": [
+				{
+					"active": true,
+					"capacity": 228,
+					"capacityFactor": 9.2,
+					"code": "SUNRSF1",
+					"currentPower": 21.0346,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 58.8,
+			"code": "SUNTPSF",
+			"currentPower": 102.8867,
+			"lat": -32.5742,
+			"lng": 148.860469,
+			"name": "Suntop",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 175,
+			"units": [
+				{
+					"active": true,
+					"capacity": 175,
+					"capacityFactor": 58.8,
+					"code": "SUNTPSF1",
+					"currentPower": 102.8867,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 22.2,
+			"code": "SRSF",
+			"currentPower": 18.9,
+			"lat": -25.420275,
+			"lng": 152.742028,
+			"name": "Susan River",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 85,
+			"units": [
+				{
+					"active": true,
+					"capacity": 85,
+					"capacityFactor": 22.2,
+					"code": "SRSF1",
+					"currentPower": 18.9,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "TBSF",
+			"currentPower": 0,
+			"lat": -35.28,
+			"lng": 139.49,
+			"name": "Tailem Bend",
+			"network": "NEM",
+			"region": "SA1",
+			"totalCapacity": 108,
+			"units": [
+				{
+					"active": true,
+					"capacity": 108,
+					"capacityFactor": 0,
+					"code": "TBSF1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-19T15:10:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 82.9,
+			"code": "TB2SF",
+			"currentPower": 86.9946,
+			"lat": -35.28,
+			"lng": 139.49,
+			"name": "Tailem Bend 2",
+			"network": "NEM",
+			"region": "SA1",
+			"totalCapacity": 105,
+			"units": [
+				{
+					"active": true,
+					"capacity": 105,
+					"capacityFactor": 82.9,
+					"code": "TB2SF1",
+					"currentPower": 86.9946,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 12.8,
+			"code": "WAGGNSF",
+			"currentPower": 7.0326,
+			"lat": -35.069081,
+			"lng": 147.438227,
+			"name": "Wagga North",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 55,
+			"units": [
+				{
+					"active": true,
+					"capacity": 55,
+					"capacityFactor": 12.8,
+					"code": "WAGGNSF1",
+					"currentPower": 7.0326,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 29,
+			"code": "WLWLSF",
+			"currentPower": 116.857,
+			"lat": -35.746481,
+			"lng": 146.961838,
+			"name": "Walla Walla",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 403.2,
+			"units": [
+				{
+					"active": true,
+					"capacity": 201.6,
+					"capacityFactor": 26.1,
+					"code": "WLWLSF1",
+					"currentPower": 52.7159,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				},
+				{
+					"active": true,
+					"capacity": 201.6,
+					"capacityFactor": 31.8,
+					"code": "WLWLSF2",
+					"currentPower": 64.1411,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 52.3,
+			"code": "WANDSF",
+			"currentPower": 83.1995,
+			"lat": -26.263564,
+			"lng": 149.772243,
+			"name": "Wandoan",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 159,
+			"units": [
+				{
+					"active": true,
+					"capacity": 159,
+					"capacityFactor": 52.3,
+					"code": "WANDSF1",
+					"currentPower": 83.1995,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 74.1,
+			"code": "WNSF",
+			"currentPower": 19.56,
+			"lat": -36.326757,
+			"lng": 146.359901,
+			"name": "Wangaratta",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 26.4,
+			"units": [
+				{
+					"active": true,
+					"capacity": 26.4,
+					"capacityFactor": 74.1,
+					"code": "WNSF1",
+					"currentPower": 19.56,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 17.7,
+			"code": "WARWSF",
+			"currentPower": 13.8,
+			"lat": -28.18321,
+			"lng": 152.066792,
+			"name": "Warwick",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 78,
+			"units": [
+				{
+					"active": true,
+					"capacity": 39,
+					"capacityFactor": 17.2,
+					"code": "WARWSF2",
+					"currentPower": 6.7,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				},
+				{
+					"active": true,
+					"capacity": 39,
+					"capacityFactor": 18.2,
+					"code": "WARWSF1",
+					"currentPower": 7.1,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 10.6,
+			"code": "WELLSF1",
+			"currentPower": 22.9221,
+			"lat": -32.5207,
+			"lng": 148.9675,
+			"name": "Wellington",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 216,
+			"units": [
+				{
+					"active": true,
+					"capacity": 216,
+					"capacityFactor": 10.6,
+					"code": "WELLSF1",
+					"currentPower": 22.9221,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 9.1,
+			"code": "WELNSF",
+			"currentPower": 39.7828,
+			"lat": -32.514353,
+			"lng": 148.957634,
+			"name": "Wellington North",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 436,
+			"units": [
+				{
+					"active": true,
+					"capacity": 436,
+					"capacityFactor": 9.1,
+					"code": "WELNSF1",
+					"currentPower": 39.7828,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 69.3,
+			"code": "WEMENSF1",
+			"currentPower": 67.2,
+			"lat": -34.80259,
+			"lng": 142.543348,
+			"name": "Wemen",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 97,
+			"units": [
+				{
+					"active": true,
+					"capacity": 97,
+					"capacityFactor": 69.3,
+					"code": "WEMENSF1",
+					"currentPower": 67.2,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 41.7,
+			"code": "WSTWYSF",
+			"currentPower": 43.7862,
+			"lat": -33.795635,
+			"lng": 147.314545,
+			"name": "West Wyalong",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 105,
+			"units": [
+				{
+					"active": true,
+					"capacity": 105,
+					"capacityFactor": 41.7,
+					"code": "WSTWYSF1",
+					"currentPower": 43.7862,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 43.8,
+			"code": "WDGPH",
+			"currentPower": 219.445,
+			"lat": -26.927922,
+			"lng": 150.601542,
+			"name": "Western Downs",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 501,
+			"units": [
+				{
+					"active": true,
+					"capacity": 501,
+					"capacityFactor": 43.8,
+					"code": "WDGPH1",
+					"currentPower": 219.445,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "WRSF1",
+			"currentPower": 0,
+			"lat": -29.763292,
+			"lng": 151.552402,
+			"name": "White Rock Solar Farm",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 22,
+			"units": [
+				{
+					"active": true,
+					"capacity": 22,
+					"capacityFactor": 0,
+					"code": "WRSF1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-16T06:15:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 38.3,
+			"code": "WHITSF",
+			"currentPower": 22,
+			"lat": -20.537259,
+			"lng": 147.80475,
+			"name": "Whitsunday",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 57.5,
+			"units": [
+				{
+					"active": true,
+					"capacity": 57.5,
+					"capacityFactor": 38.3,
+					"code": "WHITSF1",
+					"currentPower": 22,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 72.7,
+			"code": "WINTSF1",
+			"currentPower": 77.75,
+			"lat": -36.499695,
+			"lng": 146.114554,
+			"name": "Winton",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 107,
+			"units": [
+				{
+					"active": true,
+					"capacity": 107,
+					"capacityFactor": 72.7,
+					"code": "WINTSF1",
+					"currentPower": 77.75,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 18.5,
+			"code": "WOLARSF",
+			"currentPower": 59.8773,
+			"lat": -32.407631,
+			"lng": 149.940737,
+			"name": "Wollar",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 324,
+			"units": [
+				{
+					"active": true,
+					"capacity": 324,
+					"capacityFactor": 18.5,
+					"code": "WOLARSF1",
+					"currentPower": 59.8773,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 13.4,
+			"code": "WOOLGSF",
+			"currentPower": 29.8,
+			"lat": -26.075843,
+			"lng": 152.437448,
+			"name": "Woolooga",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 222.5,
+			"units": [
+				{
+					"active": true,
+					"capacity": 222.5,
+					"capacityFactor": 13.4,
+					"code": "WOOLGSF1",
+					"currentPower": 29.8,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 76.9,
+			"code": "WUNUSF",
+			"currentPower": 71.94,
+			"lat": -36.164387,
+			"lng": 145.403731,
+			"name": "Wunghnu",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 93.5,
+			"units": [
+				{
+					"active": true,
+					"capacity": 93.5,
+					"capacityFactor": 76.9,
+					"code": "WUNUSF1",
+					"currentPower": 71.94,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 38.5,
+			"code": "WYASF",
+			"currentPower": 23.989,
+			"lat": -33.804939,
+			"lng": 147.295155,
+			"name": "Wyalong",
+			"network": "NEM",
+			"region": "NSW1",
+			"totalCapacity": 62.32,
+			"units": [
+				{
+					"active": true,
+					"capacity": 62.32,
+					"capacityFactor": 38.5,
+					"code": "WYASF1",
+					"currentPower": 23.989,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 30.6,
+			"code": "YARANSF",
+			"currentPower": 37,
+			"lat": -27.708939,
+			"lng": 151.532696,
+			"name": "Yarranlea",
+			"network": "NEM",
+			"region": "QLD1",
+			"totalCapacity": 121,
+			"units": [
+				{
+					"active": true,
+					"capacity": 121,
+					"capacityFactor": 30.6,
+					"code": "YARANSF1",
+					"currentPower": 37,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": true,
+			"capacityFactor": 61.9,
+			"code": "YATSF1",
+			"currentPower": 58.16,
+			"lat": -34.38073,
+			"lng": 142.20534,
+			"name": "Yatpool",
+			"network": "NEM",
+			"region": "VIC1",
+			"totalCapacity": 94,
+			"units": [
+				{
+					"active": true,
+					"capacity": 94,
+					"capacityFactor": 61.9,
+					"code": "YATSF1",
+					"currentPower": 58.16,
+					"lastSeen": "2026-03-19T15:30:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "SBSOLAR1_CUNDERDIN_PV",
+			"currentPower": 0,
+			"lat": -31.656115,
+			"lng": 117.276303,
+			"name": "Cunderdin",
+			"network": "WEM",
+			"region": "WEM",
+			"totalCapacity": 128,
+			"units": [
+				{
+					"active": false,
+					"capacity": 128,
+					"capacityFactor": 0,
+					"code": "SBSOLAR1_CUNDERDIN_PV1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-16T05:25:00+08:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "GREENOUGH_RIVER",
+			"currentPower": 0,
+			"lat": -28.90381,
+			"lng": 115.10937,
+			"name": "Greenough River",
+			"network": "WEM",
+			"region": "WEM",
+			"totalCapacity": 40,
+			"units": [
+				{
+					"active": false,
+					"capacity": 40,
+					"capacityFactor": 0,
+					"code": "GREENOUGH_RIVER_PV1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-19T07:55:00+08:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "MERSOLAR",
+			"currentPower": 0,
+			"lat": -31.54515,
+			"lng": 118.228147,
+			"name": "Merredin",
+			"network": "WEM",
+			"region": "WEM",
+			"totalCapacity": 132,
+			"units": [
+				{
+					"active": false,
+					"capacity": 132,
+					"capacityFactor": 0,
+					"code": "MERSOLAR_PV1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-19T07:55:00+08:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "AMBRISOLAR",
+			"currentPower": 0,
+			"lat": -32.103385,
+			"lng": 115.808456,
+			"name": "Metro",
+			"network": "WEM",
+			"region": "WEM",
+			"totalCapacity": 0.96,
+			"units": [
+				{
+					"active": false,
+					"capacity": 0.96,
+					"capacityFactor": 0,
+					"code": "AMBRISOLAR_PV1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-19T07:55:00+10:00"
+				}
+			]
+		},
+		{
+			"active": false,
+			"capacityFactor": 0,
+			"code": "NORTHAM_SF",
+			"currentPower": 0,
+			"lat": -31.65161,
+			"lng": 116.711541,
+			"name": "Northam",
+			"network": "WEM",
+			"region": "WEM",
+			"totalCapacity": 10,
+			"units": [
+				{
+					"active": false,
+					"capacity": 10,
+					"capacityFactor": 0,
+					"code": "NORTHAM_SF_PV1",
+					"currentPower": 0,
+					"lastSeen": "2026-03-19T07:55:00+08:00"
+				}
+			]
+		}
+	],
+	"lastUpdated": "2026-03-19T05:32:27.109Z",
+	"totalCapacity": 14704.789999999999,
+	"totalPower": 4646.044500000001
+}

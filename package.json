@@ -4,14 +4,18 @@
 	"private": true,
 	"type": "module",
 	"scripts": {
-		"dev": "vite",
+		"dev": "VITE_MODE=wind vite",
+		"dev:solar": "VITE_MODE=solar vite",
 		"build": "vite build",
 		"preview": "vite preview",
 		"lint": "ultracite check",
 		"format": "ultracite fix",
 		"generate:facilities": "bun run scripts/generate-facilities.ts",
+		"generate:facilities:solar": "FUELTECH=solar_utility bun run scripts/generate-facilities.ts",
 		"generate:wind": "bun run scripts/generate-wind.ts",
-		"generate": "bun run --sequential generate:facilities generate:wind"
+		"generate:solar": "bun run scripts/generate-solar.ts",
+		"generate": "bun run --sequential generate:facilities generate:wind",
+		"generate:all": "bun run --sequential generate:facilities generate:facilities:solar generate:wind generate:solar"
 	},
 	"dependencies": {
 		"@tanstack/react-query": "^5.90.21",
@@ -32,6 +36,7 @@
 		"tailwindcss": "^4.1.0",
 		"typescript": "^5.8.0",
 		"ultracite": "7.3.2",
-		"vite": "^6.3.0"
+		"vite": "^6.3.0",
+		"yallist": "3.1.1"
 	}
 }

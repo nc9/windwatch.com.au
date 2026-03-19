@@ -9,6 +9,7 @@ import { join } from "node:path"
 import { OpenElectricityClient } from "openelectricity"
 
 const client = new OpenElectricityClient()
+const fueltech = process.env.FUELTECH || "wind"
 
 async function main() {
 	// Fetch from both NEM and WEM
@@ -16,9 +17,9 @@ async function main() {
 	const allFacilities: typeof response.data = []
 
 	for (const network of networks) {
-		console.log(`Fetching ${network} wind facilities...`)
+		console.log(`Fetching ${network} ${fueltech} facilities...`)
 		const { response } = await client.getFacilities({
-			fueltech_id: ["wind"],
+			fueltech_id: [fueltech],
 			network_id: [network],
 			status_id: ["operating"],
 		})
@@ -152,9 +153,14 @@ async function main() {
 		totalPower,
 	}
 
-	const outPath = join(import.meta.dir, "../public/data/facilities.json")
+	const outPath = join(
+		import.meta.dir,
+		`../public/data/${fueltech}-facilities.json`
+	)
 	writeFileSync(outPath, JSON.stringify(data))
-	console.log(`\nWritten ${facilities.length} facilities to ${outPath}`)
+	console.log(
+		`\nWritten ${facilities.length} ${fueltech} facilities to ${outPath}`
+	)
 	console.log(
 		`Total: ${Math.round(totalPower)} MW / ${Math.round(totalCapacity)} MW (${data.aggregateCapacityFactor}%)`
 	)
