@@ -1,20 +1,18 @@
+import { siteConfig } from "../config"
 import { formatMW, formatPercent } from "../lib/format"
-import type { WindFacilityData } from "../lib/types"
+import type { FacilityData } from "../lib/types"
+import { SunArc } from "./sun-arc"
 
 interface Props {
-	data: WindFacilityData | null
+	data: FacilityData | null
 	error?: string | null
 }
 
 export function StatsPanel({ data, error }: Props) {
 	return (
 		<div className="pointer-events-auto absolute top-4 left-4 z-10 max-w-xs rounded-xl border border-neutral-800 bg-neutral-950/90 p-4 shadow-lg backdrop-blur-sm">
-			<h1 className="mb-1 text-lg font-bold text-white">
-				Wind Watch Australia
-			</h1>
-			<p className="mb-3 text-xs text-neutral-400">
-				Real-time wind farm generation
-			</p>
+			<h1 className="mb-1 text-lg font-bold text-white">{siteConfig.title}</h1>
+			<p className="mb-3 text-xs text-neutral-400">{siteConfig.subtitle}</p>
 
 			{error ? (
 				<div className="text-sm text-red-400">{error}</div>
@@ -34,6 +32,7 @@ export function StatsPanel({ data, error }: Props) {
 						value={formatPercent(data.aggregateCapacityFactor)}
 					/>
 					<StatRow label="Facilities" value={String(data.facilities.length)} />
+					{siteConfig.mode === "solar" && <SunArc />}
 					<div className="border-t border-neutral-800 pt-2 text-xs text-neutral-500">
 						Updated{" "}
 						{new Date(data.lastUpdated).toLocaleTimeString("en-AU", {
@@ -45,7 +44,7 @@ export function StatsPanel({ data, error }: Props) {
 					</div>
 				</div>
 			) : (
-				<div className="text-sm text-neutral-500">Loading wind data...</div>
+				<div className="text-sm text-neutral-500">{siteConfig.loadingText}</div>
 			))}
 		</div>
 	)
