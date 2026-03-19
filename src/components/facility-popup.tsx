@@ -1,3 +1,4 @@
+import { siteConfig } from "../config"
 import { capacityFactorColor } from "../lib/colors"
 import { formatMW, formatPercent, regionName } from "../lib/format"
 
@@ -15,7 +16,7 @@ export function FacilityPopup(props: Record<string, unknown>): string {
 	const active = props.active as boolean
 	const unitCount = props.unitCount as number
 
-	const cfColor = capacityFactorColor(capacityFactor)
+	const cfColor = capacityFactorColor(capacityFactor, siteConfig.mode)
 	const cfWidth = Math.max(2, Math.min(100, capacityFactor))
 
 	return `
