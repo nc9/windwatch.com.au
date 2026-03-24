@@ -108,10 +108,14 @@ export class WindParticleRenderer implements FieldRenderer {
 		}
 
 		// Build heatmap as DOM canvas overlay (more reliable than MapLibre image source)
-		this.buildHeatmapCanvas()
-		this.map.on("moveend", () => this.drawHeatmapCanvas())
-		this.map.on("zoomend", () => this.drawHeatmapCanvas())
-		this.map.on("move", () => this.drawHeatmapCanvas())
+		try {
+			this.buildHeatmapCanvas()
+			this.map.on("moveend", () => this.drawHeatmapCanvas())
+			this.map.on("zoomend", () => this.drawHeatmapCanvas())
+			this.map.on("move", () => this.drawHeatmapCanvas())
+		} catch (e) {
+			console.warn("heatmap canvas failed:", e)
+		}
 	}
 
 	/** Render heatmap to offscreen canvas, add as MapLibre image source between terrain and labels */
@@ -255,7 +259,7 @@ export class WindParticleRenderer implements FieldRenderer {
 		const hc = document.createElement("canvas")
 		hc.dataset.windLayer = "heatmap"
 		hc.style.cssText =
-			"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;opacity:0.3;"
+			"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;opacity:0.12;"
 		this.heatmapCanvas = hc
 
 		// Insert before particle canvas so heatmap is behind particles
@@ -500,9 +504,9 @@ export class WindParticleRenderer implements FieldRenderer {
 				ctx.beginPath()
 				ctx.moveTo(prev.x, prev.y)
 				ctx.lineTo(curr.x, curr.y)
-				ctx.strokeStyle = "rgba(255,255,255,0.9)"
+				ctx.strokeStyle = "rgba(255,255,255,1)"
 				ctx.globalAlpha = alpha
-				ctx.lineWidth = 1 + progress * 1
+				ctx.lineWidth = 1.5 + progress * 1
 				ctx.stroke()
 			}
 		}
