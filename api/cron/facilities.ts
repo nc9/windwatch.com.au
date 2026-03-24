@@ -1,16 +1,8 @@
 import { put } from "@vercel/blob"
 import type { VercelRequest, VercelResponse } from "@vercel/node"
-import { createClient } from "@vercel/kv"
-
-function getKV() {
-	const url = process.env.KV_REST_API_URL || process.env.kv_KV_REST_API_URL || ""
-	const token = process.env.KV_REST_API_TOKEN || process.env.kv_KV_REST_API_TOKEN || ""
-	if (!url || !token) throw new Error("Missing KV env vars")
-	return createClient({ url, token })
-}
+import { kv } from "@vercel/kv"
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
-	const kv = getKV()
 	// Verify cron secret
 	const auth = req.headers.authorization
 	if (process.env.CRON_SECRET && auth !== `Bearer ${process.env.CRON_SECRET}`) {

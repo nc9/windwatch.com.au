@@ -2,14 +2,7 @@ import { deflateSync } from "node:zlib"
 
 import { put } from "@vercel/blob"
 import type { VercelRequest, VercelResponse } from "@vercel/node"
-import { createClient } from "@vercel/kv"
-
-function getKV() {
-	const url = process.env.KV_REST_API_URL || process.env.kv_KV_REST_API_URL || ""
-	const token = process.env.KV_REST_API_TOKEN || process.env.kv_KV_REST_API_TOKEN || ""
-	if (!url || !token) throw new Error("Missing KV env vars")
-	return createClient({ url, token })
-}
+import { kv } from "@vercel/kv"
 
 const BBOX = { east: 160, north: -5, south: -48, west: 105 }
 const LON_STEPS = 20
@@ -106,7 +99,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 		)
 
 		try {
-			const kv = getKV()
 			const ts = Date.now()
 			await kv.zadd("ts:solar:field", {
 				member: JSON.stringify(solarData),
