@@ -1,5 +1,12 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node"
-import { getKV } from "../lib/kv"
+import { createClient } from "@vercel/kv"
+
+function getKV() {
+	const url = process.env.KV_REST_API_URL || process.env.kv_KV_REST_API_URL || ""
+	const token = process.env.KV_REST_API_TOKEN || process.env.kv_KV_REST_API_TOKEN || ""
+	if (!url || !token) throw new Error("Missing KV env vars")
+	return createClient({ url, token })
+}
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
 	const kv = getKV()
