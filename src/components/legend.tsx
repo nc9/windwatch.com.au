@@ -4,7 +4,7 @@ export function Legend() {
 	const isWind = siteConfig.mode === "wind"
 
 	return (
-		<div className="pointer-events-auto absolute bottom-8 left-4 z-10 grid grid-cols-[auto_9rem_auto] items-center gap-x-1.5 gap-y-1 rounded-lg border border-neutral-800 bg-neutral-950/90 px-3 py-2 text-xs shadow-lg backdrop-blur-sm">
+		<div className="pointer-events-auto absolute bottom-16 left-4 z-10 grid grid-cols-[auto_9rem_auto] items-center gap-x-1.5 gap-y-1 rounded-lg border border-neutral-800 bg-neutral-950/90 px-3 py-2 text-xs shadow-lg backdrop-blur-sm">
 			<div className="col-span-3 text-neutral-400">Capacity Factor</div>
 			<span className="text-right text-neutral-500">Off</span>
 			<div

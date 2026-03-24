@@ -34,10 +34,12 @@ export class NightOverlay {
 
 		// HMR cleanup
 		try {
-			if (this.map.getLayer("night-overlay"))
-				{this.map.removeLayer("night-overlay")}
-			if (this.map.getSource("night-overlay"))
-				{this.map.removeSource("night-overlay")}
+			if (this.map.getLayer("night-overlay")) {
+				this.map.removeLayer("night-overlay")
+			}
+			if (this.map.getSource("night-overlay")) {
+				this.map.removeSource("night-overlay")
+			}
 		} catch {}
 
 		// Insert below labels
@@ -123,9 +125,13 @@ export class NightOverlay {
 	}
 
 	update() {
-		if (!this.sourceAdded) {return}
+		if (!this.sourceAdded) {
+			return
+		}
 		const source = this.map.getSource("night-overlay") as any
-		if (!source) {return}
+		if (!source) {
+			return
+		}
 
 		const dataUrl = this.renderNightMask()
 		const [west, south, east, north] = BBOX

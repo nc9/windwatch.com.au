@@ -1,6 +1,7 @@
 import { deflateSync } from "node:zlib"
 
 import { put } from "@vercel/blob"
+import { kv } from "@vercel/kv"
 import type { VercelRequest, VercelResponse } from "@vercel/node"
 
 const BBOX = { east: 160, north: -5, south: -48, west: 105 }
@@ -96,6 +97,17 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 				contentType: "application/json",
 			}
 		)
+
+		try {
+			const ts = Date.now()
+			await kv.zadd("ts:solar:field", {
+				member: JSON.stringify(solarData),
+				score: ts,
+			})
+			await kv.zremrangebyscore("ts:solar:field", 0, ts - 7 * 86_400_000)
+		} catch (error) {
+			console.error("KV solar write error:", error)
+		}
 
 		return res.json({ grid: `${LON_STEPS}x${LAT_STEPS}`, ok: true, url })
 	} catch (error) {

@@ -77,3 +77,41 @@ export interface FieldRenderer {
 	stop(): void
 	destroy(): void
 }
+
+/** Compact facility snapshot for KV time series */
+export interface FacilitySnapshot {
+	ts: number
+	/** Total power MW */
+	t: number
+	/** Aggregate capacity factor % */
+	acf: number
+	/** Facility code → [currentPower, capacityFactor] */
+	f: Record<string, [number, number]>
+}
+
+/** Static facility metadata (stored once in KV) */
+export interface FacilityMeta {
+	facilities: {
+		code: string
+		name: string
+		lat: number
+		lng: number
+		network: string
+		region: string
+		totalCapacity: number
+		units: Array<{ code: string; capacity: number }>
+	}[]
+}
+
+/** Timeline index from /api/history/index */
+export interface TimelineIndex {
+	earliest: number | null
+	latest: number | null
+	count: number
+}
+
+/** Response from /api/history/snapshots */
+export interface SnapshotResponse {
+	snapshots: FacilitySnapshot[]
+	meta: FacilityMeta | null
+}

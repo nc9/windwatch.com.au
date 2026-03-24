@@ -4,6 +4,7 @@ export const windConfig: SiteConfig = {
 	description:
 		"Real-time wind farm generation and wind patterns across Australia",
 	facilitiesUrl: "/data/wind-facilities.json",
+	historyUrl: "/data/history-wind.json",
 	favicon: "\u{1F4A8}",
 	fieldRefetchInterval: 6 * 60 * 60 * 1000, // 6h
 	fieldUrl: "/data/wind.json",

@@ -7,6 +7,7 @@ export interface SiteConfig {
 	facilitiesUrl: string
 	fieldUrl: string
 	fieldRefetchInterval: number
+	historyUrl: string
 	loadingText: string
 }
 

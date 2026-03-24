@@ -1,4 +1,5 @@
 import { put } from "@vercel/blob"
+import { kv } from "@vercel/kv"
 import type { VercelRequest, VercelResponse } from "@vercel/node"
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
@@ -143,6 +144,49 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 				contentType: "application/json",
 			}
 		)
+
+		// Archive to KV time series
+		try {
+			const ts = now.getTime()
+			const snapshot = {
+				acf: data.aggregateCapacityFactor,
+				f: Object.fromEntries(
+					allFacilities.map((f: any) => [
+						f.code,
+						[Math.round(f.currentPower * 100) / 100, f.capacityFactor],
+					])
+				),
+				t: Math.round(totalPower * 100) / 100,
+				ts,
+			}
+			const kvKey = `ts:${fueltech}:facilities`
+			await kv.zadd(kvKey, { member: JSON.stringify(snapshot), score: ts })
+			// Prune > 7 days
+			await kv.zremrangebyscore(kvKey, 0, ts - 7 * 86_400_000)
+
+			// Update static metadata
+			await kv.set(
+				`meta:${fueltech}:facilities`,
+				JSON.stringify({
+					facilities: allFacilities.map((f: any) => ({
+						code: f.code,
+						lat: f.lat,
+						lng: f.lng,
+						name: f.name,
+						network: f.network,
+						region: f.region,
+						totalCapacity: f.totalCapacity,
+						units: f.units.map((u: any) => ({
+							code: u.code,
+							capacity: u.capacity,
+						})),
+					})),
+				}),
+				{ ex: 7 * 86_400 }
+			)
+		} catch (error) {
+			console.error("KV facilities write error:", error)
+		}
 
 		return res.json({ facilities: allFacilities.length, ok: true, url })
 	} catch (error) {

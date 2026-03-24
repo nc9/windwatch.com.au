@@ -6,9 +6,10 @@ import { SunArc } from "./sun-arc"
 interface Props {
 	data: FacilityData | null
 	error?: string | null
+	isLive?: boolean
 }
 
-export function StatsPanel({ data, error }: Props) {
+export function StatsPanel({ data, error, isLive = true }: Props) {
 	return (
 		<div className="pointer-events-auto absolute top-4 left-4 z-10 max-w-xs rounded-xl border border-neutral-800 bg-neutral-950/90 p-4 shadow-lg backdrop-blur-sm">
 			<h1 className="mb-1 text-lg font-bold text-white">{siteConfig.title}</h1>
@@ -34,13 +35,20 @@ export function StatsPanel({ data, error }: Props) {
 					<StatRow label="Facilities" value={String(data.facilities.length)} />
 					{siteConfig.mode === "solar" && <SunArc />}
 					<div className="border-t border-neutral-800 pt-2 text-xs text-neutral-500">
-						Updated{" "}
+						{isLive ? "Updated" : "Viewing"}{" "}
 						{new Date(data.lastUpdated).toLocaleTimeString("en-AU", {
+							day: isLive ? undefined : "numeric",
 							hour: "2-digit",
 							minute: "2-digit",
+							month: isLive ? undefined : "short",
 							timeZone: "Australia/Brisbane",
 						})}{" "}
 						AEST
+						{!isLive && (
+							<span className="ml-2 rounded bg-amber-900/50 px-1.5 py-0.5 text-amber-400">
+								Historical
+							</span>
+						)}
 					</div>
 				</div>
 			) : (

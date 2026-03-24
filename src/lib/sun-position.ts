@@ -50,7 +50,11 @@ export function sunTimes(
 export function sunProgress(lat: number, lng: number, date: Date): number {
 	const { sunrise, sunset } = sunTimes(lat, lng, date)
 	const t = date.getTime()
-	if (t <= sunrise.getTime()) {return 0}
-	if (t >= sunset.getTime()) {return 1}
+	if (t <= sunrise.getTime()) {
+		return 0
+	}
+	if (t >= sunset.getTime()) {
+		return 1
+	}
 	return (t - sunrise.getTime()) / (sunset.getTime() - sunrise.getTime())
 }

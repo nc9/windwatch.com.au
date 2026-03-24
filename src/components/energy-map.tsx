@@ -109,7 +109,9 @@ export function EnergyMap({ facilities, fieldData }: Props) {
 	// Night overlay — solar mode only (above heatmap, below facilities)
 	useEffect(() => {
 		const map = mapRef.current
-		if (!map || !fieldData || siteConfig.mode !== "solar") {return}
+		if (!map || !fieldData || siteConfig.mode !== "solar") {
+			return
+		}
 		const overlay = new NightOverlay(map)
 		overlay.init()
 		return () => overlay.destroy()
