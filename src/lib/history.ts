@@ -8,7 +8,10 @@ import type {
 
 /** Fetch the full history file (meta + all snapshots) */
 export async function fetchHistory(url: string): Promise<SnapshotResponse> {
-	const r = await fetch(`${url}?t=${Date.now()}`, { cache: "no-store" })
+	const sep = url.includes("?") ? "&" : "?"
+	const r = await fetch(`${url}${sep}t=${Date.now()}&limit=2016`, {
+		cache: "no-store",
+	})
 	if (!r.ok) return { meta: null, snapshots: [] }
 	return r.json()
 }
