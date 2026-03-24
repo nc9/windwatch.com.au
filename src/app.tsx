@@ -44,18 +44,22 @@ export function App() {
 		staleTime: 5 * 60_000,
 	})
 
-	// Historical field data (wind heatmap/particles update when scrubbing)
+	// Historical field data — round to nearest hour (KV granularity) to reduce API calls
+	const fieldHistoryHour = selectedTime
+		? Math.round(selectedTime / 3_600_000) * 3_600_000
+		: null
 	const historicalField = useQuery<FieldData>({
 		queryFn: () =>
 			fetch(
-				`${FIELD_HISTORY_URL}?type=${siteConfig.mode}&at=${selectedTime}`,
+				`${FIELD_HISTORY_URL}?type=${siteConfig.mode}&at=${fieldHistoryHour}`,
 			).then((r) => {
 				if (!r.ok) throw new Error(`field history ${r.status}`)
 				return r.json()
 			}),
-		enabled: !isLive && selectedTime !== null,
-		queryKey: ["field-history", selectedTime],
+		enabled: !isLive && fieldHistoryHour !== null,
+		queryKey: ["field-history", fieldHistoryHour],
 		staleTime: Number.POSITIVE_INFINITY,
+		retry: false,
 	})
 
 	// Derive historical facility data from snapshot

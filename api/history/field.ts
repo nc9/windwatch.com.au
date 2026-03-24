@@ -21,6 +21,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
 		const data = typeof raw[0] === "string" ? JSON.parse(raw[0]) : raw[0]
 
+		// Validate the entry has required fields
+		if (!data?.image || !data?.bbox) {
+			return res.status(404).json({ error: "Corrupt field entry" })
+		}
+
 		res.setHeader("Cache-Control", "s-maxage=300, stale-while-revalidate=600")
 		return res.json(data)
 	} catch (error) {

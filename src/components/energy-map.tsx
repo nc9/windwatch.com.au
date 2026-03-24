@@ -27,6 +27,7 @@ export function EnergyMap({ facilities, fieldData }: Props) {
 	const rendererRef = useRef<FieldRenderer | null>(null)
 	const popupRef = useRef<maplibregl.Popup | null>(null)
 	const [fieldGrid, setFieldGrid] = useState<ImageData | null>(null)
+	const [selectedFacilityCode, setSelectedFacilityCode] = useState<string | null>(null)
 
 	// Decode field PNG once when fieldData arrives
 	useEffect(() => {
@@ -122,10 +123,22 @@ export function EnergyMap({ facilities, fieldData }: Props) {
 		return () => overlay.destroy()
 	}, [fieldData])
 
-	// Close popup when data changes (so re-click shows updated wind/power)
+	// Update open popup when data changes (facility power + wind direction)
 	useEffect(() => {
-		popupRef.current?.remove()
-	}, [facilities, fieldData])
+		if (!selectedFacilityCode || !facilities || !popupRef.current) return
+		const f = facilities.facilities.find((fac) => fac.code === selectedFacilityCode)
+		if (!f) return
+
+		let fieldInfo: LocalWind | LocalSolar | null = null
+		if (fieldData && fieldGrid) {
+			if (siteConfig.mode === "wind") {
+				fieldInfo = getWindAt(fieldData as WindFieldData, fieldGrid, f.lng, f.lat)
+			} else {
+				fieldInfo = getSolarAt(fieldData as SolarFieldData, fieldGrid, f.lng, f.lat)
+			}
+		}
+		popupRef.current.setHTML(buildPopupHTML(f, fieldInfo))
+	}, [facilities, fieldData, fieldGrid, selectedFacilityCode])
 
 	// Facility circles as MapLibre layer (renders below labels)
 	useEffect(() => {
@@ -275,7 +288,8 @@ export function EnergyMap({ facilities, fieldData }: Props) {
 				}
 
 				popupRef.current?.remove()
-				popupRef.current = new maplibregl.Popup({
+				setSelectedFacilityCode(f.code)
+				const popup = new maplibregl.Popup({
 					closeButton: true,
 					maxWidth: "260px",
 					offset: 10,
@@ -283,6 +297,8 @@ export function EnergyMap({ facilities, fieldData }: Props) {
 					.setLngLat([f.lng, f.lat])
 					.setHTML(buildPopupHTML(f, fieldInfo))
 					.addTo(map)
+				popup.on("close", () => setSelectedFacilityCode(null))
+				popupRef.current = popup
 			})
 		}
 
