@@ -108,10 +108,18 @@ export class WindParticleRenderer implements FieldRenderer {
 
 		// Build heatmap as MapLibre layer (renders between terrain and labels)
 		// Must wait for style to be fully loaded before adding sources/layers
+		const tryBuild = () => {
+			try {
+				this.buildHeatmap()
+			} catch (e) {
+				console.warn("heatmap build deferred:", e)
+				this.map.once("idle", () => this.buildHeatmap())
+			}
+		}
 		if (this.map.isStyleLoaded()) {
-			this.buildHeatmap()
+			tryBuild()
 		} else {
-			this.map.once("style.load", () => this.buildHeatmap())
+			this.map.once("load", () => tryBuild())
 		}
 		this.map.on("moveend", () => this.updateHeatmap())
 		this.map.on("zoomend", () => this.updateHeatmap())
@@ -120,6 +128,7 @@ export class WindParticleRenderer implements FieldRenderer {
 	/** Render heatmap to offscreen canvas, add as MapLibre image source between terrain and labels */
 	private buildHeatmap() {
 		if (!this.windData || !this.windImage) {
+			console.warn("[heatmap] no wind data/image")
 			return
 		}
 
@@ -147,8 +156,9 @@ export class WindParticleRenderer implements FieldRenderer {
 			}
 		} catch {}
 
-		// Insert heatmap below labels but above everything else
-		const { layers } = this.map.getStyle()
+		// Find first symbol layer to insert below labels
+		const style = this.map.getStyle()
+		const layers = style?.layers ?? []
 		let insertBefore: string | undefined
 		for (const layer of layers) {
 			if (layer.type === "symbol") {
@@ -166,14 +176,15 @@ export class WindParticleRenderer implements FieldRenderer {
 		this.map.addLayer(
 			{
 				id: "wind-heatmap",
-				paint: { "raster-fade-duration": 0, "raster-opacity": 0.5 },
+				paint: { "raster-fade-duration": 0, "raster-opacity": 0.55 },
 				source: "wind-heatmap",
 				type: "raster",
 			},
-			insertBefore
+			insertBefore,
 		)
 
 		this.heatmapSourceAdded = true
+		console.log("[heatmap] added, insertBefore:", insertBefore)
 	}
 
 	private updateHeatmap() {
