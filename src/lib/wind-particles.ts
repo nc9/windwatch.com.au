@@ -45,6 +45,7 @@ export class WindParticleRenderer implements FieldRenderer {
 	private readonly trailLength = 30
 	private readonly speedFactor = 0.002
 	private heatmapSourceAdded = false
+	private heatmapCanvas: HTMLCanvasElement | null = null
 	private lastFrameTime = 0
 	private readonly frameInterval = 50 // ~20fps
 
@@ -106,23 +107,11 @@ export class WindParticleRenderer implements FieldRenderer {
 			this.particles.push(this.randomParticle())
 		}
 
-		// Build heatmap as MapLibre layer (renders between terrain and labels)
-		// Must wait for style to be fully loaded before adding sources/layers
-		const tryBuild = () => {
-			try {
-				this.buildHeatmap()
-			} catch (e) {
-				console.warn("heatmap build deferred:", e)
-				this.map.once("idle", () => this.buildHeatmap())
-			}
-		}
-		if (this.map.isStyleLoaded()) {
-			tryBuild()
-		} else {
-			this.map.once("load", () => tryBuild())
-		}
-		this.map.on("moveend", () => this.updateHeatmap())
-		this.map.on("zoomend", () => this.updateHeatmap())
+		// Build heatmap as DOM canvas overlay (more reliable than MapLibre image source)
+		this.buildHeatmapCanvas()
+		this.map.on("moveend", () => this.drawHeatmapCanvas())
+		this.map.on("zoomend", () => this.drawHeatmapCanvas())
+		this.map.on("move", () => this.drawHeatmapCanvas())
 	}
 
 	/** Render heatmap to offscreen canvas, add as MapLibre image source between terrain and labels */
@@ -249,6 +238,93 @@ export class WindParticleRenderer implements FieldRenderer {
 
 		octx.putImageData(imgData, 0, 0)
 		return offscreen.toDataURL()
+	}
+
+	/** Create a DOM canvas for the heatmap overlay, positioned below particle canvas */
+	private buildHeatmapCanvas() {
+		if (!this.windData || !this.windImage) return
+
+		const container = this.map.getCanvas().parentElement
+		if (!container) return
+
+		// Remove existing
+		container
+			.querySelectorAll("[data-wind-layer='heatmap']")
+			.forEach((el: Element) => el.remove())
+
+		const hc = document.createElement("canvas")
+		hc.dataset.windLayer = "heatmap"
+		hc.style.cssText =
+			"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;opacity:0.55;"
+		this.heatmapCanvas = hc
+
+		// Insert before particle canvas so heatmap is behind particles
+		container.insertBefore(hc, this.canvas)
+
+		this.drawHeatmapCanvas()
+	}
+
+	/** Redraw heatmap canvas to match current map viewport */
+	private drawHeatmapCanvas() {
+		const hc = this.heatmapCanvas
+		if (!hc || !this.windData || !this.windImage) return
+
+		const el = this.map.getCanvas()
+		const w = el.clientWidth
+		const h = el.clientHeight
+		hc.width = w
+		hc.height = h
+
+		const ctx = hc.getContext("2d")!
+		ctx.clearRect(0, 0, w, h)
+
+		const wd = this.windData
+		const wi = this.windImage
+		const [west, south, east, north] = wd.bbox
+
+		// Project bbox corners to screen coordinates
+		const topLeft = this.map.project([west, north])
+		const bottomRight = this.map.project([east, south])
+		const sx = topLeft.x
+		const sy = topLeft.y
+		const sw = bottomRight.x - topLeft.x
+		const sh = bottomRight.y - topLeft.y
+
+		// Render heatmap to offscreen at grid resolution
+		const offscreen = document.createElement("canvas")
+		offscreen.width = wd.width
+		offscreen.height = wd.height
+		const octx = offscreen.getContext("2d")!
+		const imgData = octx.createImageData(wd.width, wd.height)
+		const { data } = imgData
+
+		for (let gy = 0; gy < wd.height; gy++) {
+			for (let gx = 0; gx < wd.width; gx++) {
+				const i = (gy * wd.width + gx) * 4
+				const u =
+					wd.uMin + (wi.data[i] / 255) * (wd.uMax - wd.uMin)
+				const v =
+					wd.vMin + (wi.data[i + 1] / 255) * (wd.vMax - wd.vMin)
+				const speed = Math.sqrt(u * u + v * v)
+
+				const t = Math.min(speed / 30, 1) * (SPEED_COLORS.length - 1)
+				const ci = Math.floor(t)
+				const f = t - ci
+				const a = SPEED_COLORS[Math.min(ci, SPEED_COLORS.length - 1)]
+				const b = SPEED_COLORS[Math.min(ci + 1, SPEED_COLORS.length - 1)]
+
+				data[i] = Math.round(a[0] + (b[0] - a[0]) * f)
+				data[i + 1] = Math.round(a[1] + (b[1] - a[1]) * f)
+				data[i + 2] = Math.round(a[2] + (b[2] - a[2]) * f)
+				data[i + 3] = 255
+			}
+		}
+
+		octx.putImageData(imgData, 0, 0)
+
+		// Draw stretched to screen coordinates
+		ctx.imageSmoothingEnabled = true
+		ctx.drawImage(offscreen, sx, sy, sw, sh)
 	}
 
 	/** Scale particle count — fewer when zoomed in since they're packed into smaller area */
@@ -452,6 +528,7 @@ export class WindParticleRenderer implements FieldRenderer {
 	destroy() {
 		this.stop()
 		this.canvas.remove()
+		this.heatmapCanvas?.remove()
 		if (this.heatmapSourceAdded) {
 			try {
 				this.map.removeLayer("wind-heatmap")
