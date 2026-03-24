@@ -46,6 +46,7 @@ export class WindParticleRenderer implements FieldRenderer {
 	private readonly speedFactor = 0.002
 	private heatmapSourceAdded = false
 	private heatmapCanvas: HTMLCanvasElement | null = null
+	private heatmapInitialized = false
 	private lastFrameTime = 0
 	private readonly frameInterval = 50 // ~20fps
 
@@ -102,19 +103,24 @@ export class WindParticleRenderer implements FieldRenderer {
 		cx.drawImage(img, 0, 0)
 		this.windImage = cx.getImageData(0, 0, wd.width, wd.height)
 
-		this.particles = []
-		for (let i = 0; i < this.targetParticleCount(); i++) {
-			this.particles.push(this.randomParticle())
-		}
-
-		// Build heatmap as DOM canvas overlay (more reliable than MapLibre image source)
-		try {
-			this.buildHeatmapCanvas()
-			this.map.on("moveend", () => this.drawHeatmapCanvas())
-			this.map.on("zoomend", () => this.drawHeatmapCanvas())
-			this.map.on("move", () => this.drawHeatmapCanvas())
-		} catch (e) {
-			console.warn("heatmap canvas failed:", e)
+		if (!this.heatmapInitialized) {
+			// First call — init particles and heatmap canvas
+			this.particles = []
+			for (let i = 0; i < this.targetParticleCount(); i++) {
+				this.particles.push(this.randomParticle())
+			}
+			try {
+				this.buildHeatmapCanvas()
+				this.map.on("moveend", () => this.drawHeatmapCanvas())
+				this.map.on("zoomend", () => this.drawHeatmapCanvas())
+				this.map.on("move", () => this.drawHeatmapCanvas())
+			} catch (e) {
+				console.warn("heatmap canvas failed:", e)
+			}
+			this.heatmapInitialized = true
+		} else {
+			// Subsequent calls — just redraw heatmap, particles adapt naturally
+			this.drawHeatmapCanvas()
 		}
 	}
 

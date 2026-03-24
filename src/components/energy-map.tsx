@@ -78,16 +78,21 @@ export function EnergyMap({ facilities, fieldData }: Props) {
 		}
 	}, [])
 
-	// Field renderer — init once map and field data are both ready
+	// Field renderer — init once, update data on change (no destroy/recreate)
 	useEffect(() => {
 		const map = mapRef.current
 		if (!map || !fieldData) {
 			return
 		}
 
-		const init = async () => {
-			rendererRef.current?.destroy()
+		const update = async () => {
+			if (rendererRef.current) {
+				// Renderer exists — just update data (idempotent setData)
+				await rendererRef.current.setData(fieldData)
+				return
+			}
 
+			// First init
 			if (siteConfig.mode === "wind") {
 				const { WindParticleRenderer } = await import("../lib/wind-particles")
 				const renderer = new WindParticleRenderer(map)
@@ -103,7 +108,7 @@ export function EnergyMap({ facilities, fieldData }: Props) {
 			}
 		}
 
-		init()
+		update()
 	}, [fieldData])
 
 	// Night overlay — solar mode only (above heatmap, below facilities)

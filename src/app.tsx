@@ -14,6 +14,8 @@ const FACILITIES_URL =
 const FIELD_URL = import.meta.env.VITE_FIELD_URL || siteConfig.fieldUrl
 const HISTORY_URL =
 	import.meta.env.VITE_HISTORY_URL || siteConfig.historyUrl
+const FIELD_HISTORY_URL =
+	import.meta.env.VITE_FIELD_HISTORY_URL || "/api/history/field"
 
 const fetchJSON = (url: string) =>
 	fetch(`${url}?t=${Date.now()}`, { cache: "no-store" }).then((r) => r.json())
@@ -40,6 +42,20 @@ export function App() {
 		queryFn: () => fetchHistory(HISTORY_URL),
 		queryKey: ["history", siteConfig.mode],
 		staleTime: 5 * 60_000,
+	})
+
+	// Historical field data (wind heatmap/particles update when scrubbing)
+	const historicalField = useQuery<FieldData>({
+		queryFn: () =>
+			fetch(
+				`${FIELD_HISTORY_URL}?type=${siteConfig.mode}&at=${selectedTime}`,
+			).then((r) => {
+				if (!r.ok) throw new Error(`field history ${r.status}`)
+				return r.json()
+			}),
+		enabled: !isLive && selectedTime !== null,
+		queryKey: ["field-history", selectedTime],
+		staleTime: Number.POSITIVE_INFINITY,
 	})
 
 	// Derive historical facility data from snapshot
@@ -69,7 +85,9 @@ export function App() {
 	const facilities = isLive
 		? (liveFacilities.data ?? null)
 		: historicalFacilities
-	const fieldData = liveField.data ?? null
+	const fieldData = isLive
+		? (liveField.data ?? null)
+		: (historicalField.data ?? liveField.data ?? null)
 
 	return (
 		<div className="relative h-screen w-screen bg-neutral-950">

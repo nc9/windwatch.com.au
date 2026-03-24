@@ -1,7 +1,7 @@
 {
 	"crons": [
 		{ "path": "/api/cron/facilities", "schedule": "*/5 * * * *" },
-		{ "path": "/api/cron/wind", "schedule": "0 */6 * * *" },
+		{ "path": "/api/cron/wind", "schedule": "0 * * * *" },
 		{ "path": "/api/cron/solar-radiation", "schedule": "0 * * * *" }
 	]
 }
