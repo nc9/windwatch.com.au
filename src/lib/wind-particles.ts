@@ -255,7 +255,7 @@ export class WindParticleRenderer implements FieldRenderer {
 		const hc = document.createElement("canvas")
 		hc.dataset.windLayer = "heatmap"
 		hc.style.cssText =
-			"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;opacity:0.55;"
+			"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;opacity:0.3;"
 		this.heatmapCanvas = hc
 
 		// Insert before particle canvas so heatmap is behind particles

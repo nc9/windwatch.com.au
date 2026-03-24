@@ -51,14 +51,18 @@ export function App() {
 		return mergeSnapshot(history.data.meta, snap)
 	}, [isLive, selectedTime, history.data])
 
-	// Timeline bounds
+	// Timeline bounds — show immediately with estimated range, refine when data loads
 	const timelineBounds = useMemo(() => {
 		const snaps = history.data?.snapshots
-		if (!snaps?.length) return null
-		return {
-			earliest: snaps[0].ts,
-			latest: snaps[snaps.length - 1].ts,
+		if (snaps?.length) {
+			return {
+				earliest: snaps[0].ts,
+				latest: snaps[snaps.length - 1].ts,
+			}
 		}
+		// Estimated bounds while loading
+		const now = Date.now()
+		return { earliest: now - 7 * 86_400_000, latest: now }
 	}, [history.data])
 
 	// Resolve active data
@@ -78,15 +82,13 @@ export function App() {
 				isLive={isLive}
 			/>
 			<Legend />
-			{timelineBounds && (
-				<TimeScrubber
-					earliest={timelineBounds.earliest}
-					latest={timelineBounds.latest}
-					selectedTime={selectedTime}
-					onTimeChange={setSelectedTime}
-					isLoading={false}
-				/>
-			)}
+			<TimeScrubber
+				earliest={timelineBounds.earliest}
+				latest={timelineBounds.latest}
+				selectedTime={selectedTime}
+				onTimeChange={setSelectedTime}
+				isLoading={history.isLoading}
+			/>
 		</div>
 	)
 }
