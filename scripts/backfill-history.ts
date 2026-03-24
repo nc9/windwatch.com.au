@@ -1,17 +1,18 @@
 /**
- * Backfill 3 days of 5-min facility power data into a history JSON file.
+ * Backfill facility power data into local JSON + Vercel KV.
  * Run: bun run scripts/backfill-history.ts
- * Or: FUELTECH=solar_utility bun run scripts/backfill-history.ts
+ * Or: FUELTECH=solar_utility DAYS=7 bun run scripts/backfill-history.ts
  */
 
 import { writeFileSync } from "node:fs"
 import { join } from "node:path"
 
+import { createClient } from "@vercel/kv"
 import { OpenElectricityClient } from "openelectricity"
 
 const client = new OpenElectricityClient()
 const fueltech = process.env.FUELTECH || "wind"
-const DAYS_BACK = 3
+const DAYS_BACK = Number(process.env.DAYS) || 7
 const FIVE_MIN_MS = 300_000
 
 /** Round ms to nearest 5-minute boundary */
@@ -213,6 +214,45 @@ async function main() {
 			`Range: ${new Date(snapshots[0].ts).toISOString()} → ${new Date(snapshots.at(-1).ts).toISOString()}`,
 		)
 	}
+
+	// 7. Write to KV if credentials available
+	const kvUrl = process.env.KV_REST_API_URL
+	const kvToken = process.env.KV_REST_API_TOKEN
+	if (!kvUrl || !kvToken) {
+		console.log("\nNo KV_REST_API_URL/TOKEN — skipping KV backfill")
+		return
+	}
+
+	const kv = createClient({ url: kvUrl, token: kvToken })
+	const kvKey = `ts:${fueltech}:facilities`
+	const BATCH_SIZE = 50
+
+	console.log(
+		`\nWriting ${snapshots.length} snapshots to KV key "${kvKey}"...`,
+	)
+
+	for (let i = 0; i < snapshots.length; i += BATCH_SIZE) {
+		const batch = snapshots.slice(i, i + BATCH_SIZE)
+		const pipeline = kv.pipeline()
+		for (const snap of batch) {
+			pipeline.zadd(kvKey, { member: JSON.stringify(snap), score: snap.ts })
+		}
+		await pipeline.exec()
+		process.stdout.write(
+			`  KV batch ${Math.floor(i / BATCH_SIZE) + 1}/${Math.ceil(snapshots.length / BATCH_SIZE)}\n`,
+		)
+	}
+
+	// Prune entries older than 7 days
+	const cutoff = Date.now() - 7 * 86_400_000
+	await kv.zremrangebyscore(kvKey, 0, cutoff)
+
+	// Write facility metadata
+	await kv.set(`meta:${fueltech}:facilities`, JSON.stringify(meta), {
+		ex: 7 * 86_400,
+	})
+
+	console.log("KV backfill complete")
 }
 
 main().catch(console.error)

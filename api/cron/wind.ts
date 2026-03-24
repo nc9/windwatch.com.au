@@ -1,8 +1,8 @@
 import { deflateSync } from "node:zlib"
 
 import { put } from "@vercel/blob"
-import { kv } from "@vercel/kv"
 import type { VercelRequest, VercelResponse } from "@vercel/node"
+import { getKV } from "../lib/kv"
 
 const BBOX = { east: 160, north: -5, south: -48, west: 105 }
 const LON_STEPS = 20
@@ -117,6 +117,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 		)
 
 		try {
+			const kv = getKV()
 			const ts = Date.now()
 			await kv.zadd("ts:wind:field", {
 				member: JSON.stringify(windData),

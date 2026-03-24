@@ -1,7 +1,8 @@
-import { kv } from "@vercel/kv"
 import type { VercelRequest, VercelResponse } from "@vercel/node"
+import { getKV } from "../lib/kv"
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+	const kv = getKV()
 	const type = (req.query.type as string) || "wind"
 	const at = Number(req.query.at) || Date.now()
 

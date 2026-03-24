@@ -1,8 +1,9 @@
 import { put } from "@vercel/blob"
-import { kv } from "@vercel/kv"
 import type { VercelRequest, VercelResponse } from "@vercel/node"
+import { getKV } from "../lib/kv"
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+	const kv = getKV()
 	// Verify cron secret
 	const auth = req.headers.authorization
 	if (process.env.CRON_SECRET && auth !== `Bearer ${process.env.CRON_SECRET}`) {
