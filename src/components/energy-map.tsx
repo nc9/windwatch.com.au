@@ -61,7 +61,7 @@ export function EnergyMap({ facilities, fieldData }: Props) {
 			maxZoom: 12,
 			minZoom: 3,
 			style:
-				"https://api.protomaps.com/styles/v5/dark/en.json?key=fa8e7fa44153e559",
+				"https://api.protomaps.com/styles/v5/grayscale/en.json?key=fa8e7fa44153e559",
 			zoom: AUSTRALIA_ZOOM,
 		})
 

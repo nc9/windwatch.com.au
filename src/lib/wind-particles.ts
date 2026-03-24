@@ -40,7 +40,7 @@ export class WindParticleRenderer implements FieldRenderer {
 	private windImage: ImageData | null = null
 	private particles: Particle[] = []
 	private animId: number | null = null
-	private readonly baseParticleCount = 4000
+	private readonly baseParticleCount = 1500
 	private readonly baseZoom = 4.5
 	private readonly trailLength = 30
 	private readonly speedFactor = 0.002
@@ -271,7 +271,7 @@ export class WindParticleRenderer implements FieldRenderer {
 		const hc = document.createElement("canvas")
 		hc.dataset.windLayer = "heatmap"
 		hc.style.cssText =
-			"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;opacity:0.12;"
+			"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;opacity:0.5;mix-blend-mode:soft-light;filter:blur(6px);"
 		this.heatmapCanvas = hc
 
 		// Insert before particle canvas so heatmap is behind particles
@@ -516,7 +516,7 @@ export class WindParticleRenderer implements FieldRenderer {
 				ctx.beginPath()
 				ctx.moveTo(prev.x, prev.y)
 				ctx.lineTo(curr.x, curr.y)
-				ctx.strokeStyle = "rgba(255,255,255,1)"
+				ctx.strokeStyle = "rgba(100,130,180,0.8)"
 				ctx.globalAlpha = alpha
 				ctx.lineWidth = 1.5 + progress * 1
 				ctx.stroke()
