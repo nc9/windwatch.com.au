@@ -9,7 +9,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
 	try {
 		const kvKey = `ts:${fueltech}:facilities`
-		const raw = await kv.zrangebyscore(kvKey, from, to, {
+		const raw = await kv.zrange(kvKey, from, to, {
+			byScore: true,
 			count: limit,
 			offset: 0,
 		})
