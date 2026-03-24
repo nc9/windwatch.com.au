@@ -122,6 +122,11 @@ export function EnergyMap({ facilities, fieldData }: Props) {
 		return () => overlay.destroy()
 	}, [fieldData])
 
+	// Close popup when data changes (so re-click shows updated wind/power)
+	useEffect(() => {
+		popupRef.current?.remove()
+	}, [facilities, fieldData])
+
 	// Facility circles as MapLibre layer (renders below labels)
 	useEffect(() => {
 		const map = mapRef.current

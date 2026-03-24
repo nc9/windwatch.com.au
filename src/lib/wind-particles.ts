@@ -103,6 +103,11 @@ export class WindParticleRenderer implements FieldRenderer {
 		cx.drawImage(img, 0, 0)
 		this.windImage = cx.getImageData(0, 0, wd.width, wd.height)
 
+		// Reset all particle trails so they immediately flow in the new direction
+		for (const p of this.particles) {
+			p.trail = []
+		}
+
 		if (!this.heatmapInitialized) {
 			// First call — init particles and heatmap canvas
 			this.particles = []
@@ -119,7 +124,8 @@ export class WindParticleRenderer implements FieldRenderer {
 			}
 			this.heatmapInitialized = true
 		} else {
-			// Subsequent calls — just redraw heatmap, particles adapt naturally
+			// Subsequent calls — redraw heatmap + clear particle canvas
+			this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 			this.drawHeatmapCanvas()
 		}
 	}
