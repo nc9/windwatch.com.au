@@ -41,7 +41,8 @@ export function App() {
 	const history = useQuery({
 		queryFn: () => fetchHistory(HISTORY_URL),
 		queryKey: ["history", siteConfig.mode],
-		staleTime: 5 * 60_000,
+		staleTime: 4 * 60_000,
+		refetchInterval: 5 * 60_000,
 	})
 
 	// Historical field data — round to nearest hour (KV granularity) to reduce API calls
@@ -71,19 +72,25 @@ export function App() {
 		return mergeSnapshot(history.data.meta, snap)
 	}, [isLive, selectedTime, history.data])
 
-	// Timeline bounds — show immediately with estimated range, refine when data loads
+	// Timeline bounds — use live facilities timestamp when in LIVE mode so the
+	// scrubber advances as new data arrives instead of staying stuck at the last
+	// history snapshot.
+	const liveTs = liveFacilities.data?.lastUpdated
+		? new Date(liveFacilities.data.lastUpdated).getTime()
+		: null
 	const timelineBounds = useMemo(() => {
 		const snaps = history.data?.snapshots
-		if (snaps?.length) {
-			return {
-				earliest: snaps[0].ts,
-				latest: snaps[snaps.length - 1].ts,
-			}
-		}
-		// Estimated bounds while loading
-		const now = Date.now()
-		return { earliest: now - 7 * 86_400_000, latest: now }
-	}, [history.data])
+		const historyLatest = snaps?.length
+			? snaps[snaps.length - 1].ts
+			: null
+		const historyEarliest = snaps?.length ? snaps[0].ts : null
+
+		// latest = most recent of live data or history snapshots
+		const latest = Math.max(liveTs ?? 0, historyLatest ?? 0) || Date.now()
+		const earliest = historyEarliest ?? latest - 7 * 86_400_000
+
+		return { earliest, latest }
+	}, [history.data, liveTs])
 
 	// Resolve active data
 	const facilities = isLive

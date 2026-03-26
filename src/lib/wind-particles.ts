@@ -181,7 +181,7 @@ export class WindParticleRenderer implements FieldRenderer {
 		this.map.addLayer(
 			{
 				id: "wind-heatmap",
-				paint: { "raster-fade-duration": 0, "raster-opacity": 0.55 },
+				paint: { "raster-fade-duration": 0, "raster-opacity": 0.35 },
 				source: "wind-heatmap",
 				type: "raster",
 			},
@@ -271,7 +271,7 @@ export class WindParticleRenderer implements FieldRenderer {
 		const hc = document.createElement("canvas")
 		hc.dataset.windLayer = "heatmap"
 		hc.style.cssText =
-			"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;opacity:0.5;mix-blend-mode:soft-light;filter:blur(6px);"
+			"position:absolute;top:0;left:0;pointer-events:none;width:100%;height:100%;opacity:0.3;mix-blend-mode:screen;filter:blur(8px);"
 		this.heatmapCanvas = hc
 
 		// Insert before particle canvas so heatmap is behind particles
