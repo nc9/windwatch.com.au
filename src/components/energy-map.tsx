@@ -52,6 +52,7 @@ export function EnergyMap({ facilities, fieldData }: Props) {
 		}
 
 		const map = new maplibregl.Map({
+			attributionControl: false,
 			center: AUSTRALIA_CENTER,
 			container: containerRef.current,
 			maxBounds: [
@@ -65,6 +66,12 @@ export function EnergyMap({ facilities, fieldData }: Props) {
 			zoom: AUSTRALIA_ZOOM,
 		})
 
+		map.addControl(new maplibregl.AttributionControl({
+			customAttribution: [
+				'<a href="https://openelectricity.org.au" target="_blank">Open Electricity</a>',
+				'<a href="https://nikcub.me" target="_blank">Nik Cubrilovic</a>',
+			],
+		}), "bottom-right")
 		map.addControl(new maplibregl.NavigationControl(), "bottom-right")
 		mapRef.current = map
 
@@ -476,6 +483,17 @@ function buildPopupHTML(
 			`<span style="text-align:right;">${formatPercent(fieldInfo.cloudCover)}</span>`
 	}
 
+	const dateSinceRow = f.dataFirstSeen
+		? (() => {
+				const d = new Date(f.dataFirstSeen)
+				const day = d.getDate()
+				const suffix = [11, 12, 13].includes(day % 100) ? "th" : ["st", "nd", "rd"][((day % 10) - 1)] ?? "th"
+				const mon = d.toLocaleDateString("en-AU", { month: "short" })
+				return `<span style="color:#9ca3af;">Commenced</span>` +
+					`<span style="text-align:right;">${day}${suffix} ${mon} ${d.getFullYear()}</span>`
+			})()
+		: ""
+
 	return [
 		`<div style="font-family:-apple-system,system-ui,sans-serif;color:#f5f5f5;font-size:13px;min-width:210px;">`,
 		`<div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">`,
@@ -486,6 +504,7 @@ function buildPopupHTML(
 		`<div style="color:#9ca3af;font-size:11px;margin-bottom:10px;padding-left:18px;">`,
 		`${regionName(f.region)} &middot; ${f.units.length} unit${f.units.length !== 1 ? "s" : ""}</div>`,
 		`<div style="display:grid;grid-template-columns:1fr auto;gap:3px 12px;font-size:12px;padding-left:18px;">`,
+		dateSinceRow,
 		`<span style="color:#9ca3af;">Output</span>`,
 		`<span style="text-align:right;font-weight:500;">${f.active ? formatMW(f.currentPower) : "Offline"}</span>`,
 		`<span style="color:#9ca3af;">Capacity</span>`,

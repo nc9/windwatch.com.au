@@ -18,6 +18,7 @@ export interface Facility {
 	currentPower: number
 	capacityFactor: number
 	active: boolean
+	dataFirstSeen?: string | null
 }
 
 export interface FacilityData {

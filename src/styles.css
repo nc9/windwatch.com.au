@@ -80,6 +80,7 @@ body,
 	color: #6b7280 !important;
 	font-size: 10px !important;
 	backdrop-filter: blur(4px);
+	margin-bottom: 56px !important;
 }
 
 .maplibregl-ctrl-attrib a {

@@ -52,11 +52,17 @@ async function main() {
 			continue
 		}
 		const totalCapacity = units.reduce((s: number, u: any) => s + u.capacity, 0)
+		const dataFirstSeen = fac.units.reduce((earliest: string | null, u: any) => {
+			if (!u.data_first_seen) return earliest
+			if (!earliest) return u.data_first_seen
+			return u.data_first_seen < earliest ? u.data_first_seen : earliest
+		}, null)
 		facilities.push({
 			active: false,
 			capacityFactor: 0,
 			code: fac.code,
 			currentPower: 0,
+			dataFirstSeen,
 			lat: fac.location.lat,
 			lng: fac.location.lng,
 			name: fac.name,

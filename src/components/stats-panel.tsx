@@ -50,6 +50,20 @@ export function StatsPanel({ data, error, isLive = true }: Props) {
 							</span>
 						)}
 					</div>
+					<div className="border-t border-neutral-800 pt-2 text-xs text-neutral-500">
+						<div>
+							Data by{" "}
+							<a href="https://openelectricity.org.au" target="_blank" rel="noopener" className="underline hover:text-neutral-300">
+								Open Electricity
+							</a>
+						</div>
+						<div>
+							Built by{" "}
+							<a href="https://nikcub.me" target="_blank" rel="noopener" className="underline hover:text-neutral-300">
+								Nik Cubrilovic
+							</a>
+						</div>
+					</div>
 				</div>
 			) : (
 				<div className="text-sm text-neutral-500">{siteConfig.loadingText}</div>
