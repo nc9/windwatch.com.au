@@ -55,6 +55,8 @@ export function EnergyMap({ facilities, fieldData }: Props) {
 			attributionControl: false,
 			center: AUSTRALIA_CENTER,
 			container: containerRef.current,
+			// Arrow keys drive the timeline (see use-shortcuts), not map panning
+			keyboard: false,
 			maxBounds: [
 				[108, -47],
 				[157, -8],

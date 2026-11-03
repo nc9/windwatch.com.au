@@ -1,19 +1,16 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useCallback, useMemo, useRef, useState } from "react"
+
+import { RANGES } from "../lib/url-state"
 
 interface Props {
 	earliest: number
 	latest: number
 	selectedTime: number | null
 	onTimeChange: (ts: number | null) => void
+	rangeMs: number
+	onRangeChange: (ms: number) => void
 	isLoading: boolean
 }
-
-const RANGES = [
-	{ label: "6h", ms: 6 * 3_600_000 },
-	{ label: "24h", ms: 24 * 3_600_000 },
-	{ label: "3d", ms: 3 * 86_400_000 },
-	{ label: "7d", ms: 7 * 86_400_000 },
-] as const
 
 const HOUR = 3_600_000
 const DAY = 86_400_000
@@ -58,10 +55,10 @@ function getTickConfig(rangeMs: number): {
 	minor: number
 	major: number
 } {
-	if (rangeMs <= 8 * HOUR) return { minor: HOUR, major: 3 * HOUR }
-	if (rangeMs <= 26 * HOUR) return { minor: HOUR, major: 6 * HOUR }
-	if (rangeMs <= 4 * DAY) return { minor: 3 * HOUR, major: 12 * HOUR }
-	return { minor: 6 * HOUR, major: DAY }
+	if (rangeMs <= 8 * HOUR) {return { minor: HOUR, major: 3 * HOUR }}
+	if (rangeMs <= 26 * HOUR) {return { minor: HOUR, major: 6 * HOUR }}
+	if (rangeMs <= 4 * DAY) {return { minor: 3 * HOUR, major: 12 * HOUR }}
+	return { major: DAY, minor: 6 * HOUR }
 }
 
 export function TimeScrubber({
@@ -69,10 +66,11 @@ export function TimeScrubber({
 	latest,
 	selectedTime,
 	onTimeChange,
+	rangeMs,
+	onRangeChange,
 	isLoading,
 }: Props) {
 	const trackRef = useRef<HTMLDivElement>(null)
-	const [rangeMs, setRangeMs] = useState(24 * 3_600_000)
 	const [dragging, setDragging] = useState(false)
 	const debounceRef = useRef<ReturnType<typeof setTimeout>>(null)
 
@@ -85,18 +83,16 @@ export function TimeScrubber({
 	const positionToTs = useCallback(
 		(clientX: number) => {
 			const track = trackRef.current
-			if (!track) return latest
+			if (!track) {return latest}
 			const rect = track.getBoundingClientRect()
 			const pct = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width))
 			return Math.round(rangeStart + pct * (rangeEnd - rangeStart))
 		},
-		[rangeStart, rangeEnd, latest],
+		[rangeStart, rangeEnd, latest]
 	)
 
 	const pct =
-		visibleRange > 0
-			? ((currentTs - rangeStart) / visibleRange) * 100
-			: 100
+		visibleRange > 0 ? ((currentTs - rangeStart) / visibleRange) * 100 : 100
 
 	const handlePointerDown = useCallback(
 		(e: React.PointerEvent) => {
@@ -106,41 +102,22 @@ export function TimeScrubber({
 			const ts = positionToTs(e.clientX)
 			onTimeChange(ts)
 		},
-		[positionToTs, onTimeChange],
+		[positionToTs, onTimeChange]
 	)
 
 	const handlePointerMove = useCallback(
 		(e: React.PointerEvent) => {
-			if (!dragging) return
+			if (!dragging) {return}
 			const ts = positionToTs(e.clientX)
-			if (debounceRef.current) clearTimeout(debounceRef.current)
+			if (debounceRef.current) {clearTimeout(debounceRef.current)}
 			debounceRef.current = setTimeout(() => onTimeChange(ts), 100)
 		},
-		[dragging, positionToTs, onTimeChange],
+		[dragging, positionToTs, onTimeChange]
 	)
 
 	const handlePointerUp = useCallback(() => {
 		setDragging(false)
 	}, [])
-
-	// Arrow keys
-	useEffect(() => {
-		const step = 300_000 // 5 min
-		const onKey = (e: KeyboardEvent) => {
-			if (e.key === "ArrowLeft") {
-				onTimeChange(Math.max(earliest, (selectedTime ?? latest) - step))
-			} else if (e.key === "ArrowRight") {
-				const next = (selectedTime ?? latest) + step
-				if (next >= latest) {
-					onTimeChange(null)
-				} else {
-					onTimeChange(next)
-				}
-			}
-		}
-		window.addEventListener("keydown", onKey)
-		return () => window.removeEventListener("keydown", onKey)
-	}, [earliest, latest, selectedTime, onTimeChange])
 
 	// Build ticks with major/minor distinction
 	const tickConfig = useMemo(() => getTickConfig(visibleRange), [visibleRange])
@@ -154,7 +131,7 @@ export function TimeScrubber({
 			const isMajor = t % tickConfig.major === 0
 			const left = ((t - rangeStart) / visibleRange) * 100
 			if (left >= 0 && left <= 100) {
-				result.push({ ts: t, pctLeft: left, isMajor })
+				result.push({ isMajor, pctLeft: left, ts: t })
 			}
 		}
 		return result
@@ -163,13 +140,17 @@ export function TimeScrubber({
 	// Filter labels to avoid overlapping — only show labels that are spaced apart enough
 	const labelledTicks = useMemo(() => {
 		const majorTicks = ticks.filter((t) => t.isMajor)
-		if (majorTicks.length === 0) return []
+		if (majorTicks.length === 0) {return []}
 		// Minimum spacing between labels in % of track width
 		const minSpacing = 8
 		const result: typeof majorTicks = []
 		let lastPct = -minSpacing
 		for (const tick of majorTicks) {
-			if (tick.pctLeft - lastPct >= minSpacing && tick.pctLeft > 2 && tick.pctLeft < 98) {
+			if (
+				tick.pctLeft - lastPct >= minSpacing &&
+				tick.pctLeft > 2 &&
+				tick.pctLeft < 98
+			) {
 				result.push(tick)
 				lastPct = tick.pctLeft
 			}
@@ -187,7 +168,7 @@ export function TimeScrubber({
 						<button
 							key={r.label}
 							type="button"
-							onClick={() => setRangeMs(r.ms)}
+							onClick={() => onRangeChange(r.ms)}
 							className={`rounded px-2 py-0.5 text-xs font-medium transition-colors ${
 								rangeMs === r.ms
 									? "bg-neutral-700 text-white"
@@ -214,10 +195,10 @@ export function TimeScrubber({
 					<div
 						className="absolute top-[40%] left-0 h-[3px] -translate-y-1/2 rounded-full"
 						style={{
-							width: `${Math.max(0, Math.min(100, pct))}%`,
 							background: isLive
 								? "linear-gradient(to right, rgba(34,197,94,0.15), rgba(34,197,94,0.4))"
 								: "linear-gradient(to right, rgba(251,191,36,0.15), rgba(251,191,36,0.4))",
+							width: `${Math.max(0, Math.min(100, pct))}%`,
 						}}
 					/>
 

@@ -85,9 +85,12 @@ export class WindParticleRenderer implements FieldRenderer {
 		this.canvas.height = el.clientHeight
 	}
 
+	private dataSeq = 0
+
 	async setData(data: FieldData) {
 		const wd = data as WindFieldData
-		this.windData = wd
+		// Fast scrubbing can finish image loads out of order; only the latest wins
+		const seq = ++this.dataSeq
 
 		const img = new Image()
 		await new Promise<void>((resolve, reject) => {
@@ -95,6 +98,8 @@ export class WindParticleRenderer implements FieldRenderer {
 			img.onerror = reject
 			img.src = wd.image
 		})
+		if (seq !== this.dataSeq) return
+		this.windData = wd
 
 		const c = document.createElement("canvas")
 		c.width = wd.width
