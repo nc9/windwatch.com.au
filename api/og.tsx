@@ -1,7 +1,7 @@
 import { ImageResponse } from "@vercel/og"
 
-import { getKV } from "./lib/kv"
-import { OG_BG } from "./lib/og-bg"
+import { getKV } from "./lib/kv.js"
+import { OG_BG } from "./lib/og-bg.js"
 
 const CACHE = "public, s-maxage=300, stale-while-revalidate=600"
 const MAX_AGE_MS = 3 * 3_600_000
