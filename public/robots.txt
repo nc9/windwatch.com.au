@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://windwatch.com.au/sitemap.xml
