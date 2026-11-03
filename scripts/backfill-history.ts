@@ -61,8 +61,13 @@ async function main() {
 
 	// 2. Fetch power data — grouped by facility
 	const now = new Date()
-	const toAestNaive = (d: Date) =>
-		new Date(d.getTime() + 36_000_000).toISOString().slice(0, 19)
+	// Query windows are naive datetimes in the network's local time:
+	// NEM is AEST (+10), WEM is AWST (+8)
+	const NETWORK_OFFSET_HOURS: Record<string, number> = { NEM: 10, WEM: 8 }
+	const toNetworkNaive = (d: Date, network: string) =>
+		new Date(d.getTime() + (NETWORK_OFFSET_HOURS[network] ?? 10) * 3_600_000)
+			.toISOString()
+			.slice(0, 19)
 	const startDate = new Date(now.getTime() - DAYS_BACK * 86_400_000)
 
 	// unitCode → Map<roundedUtcMs, power>
@@ -85,14 +90,14 @@ async function main() {
 					network as any,
 					batch,
 					["power"],
-					{ dateStart: toAestNaive(startDate), interval: "5m" },
+					{ dateStart: toNetworkNaive(startDate, network), interval: "5m" },
 				)
 				if (!datatable) continue
 
 				for (const row of datatable.getRows()) {
 					const unitCode = row.unit_code as string
 					const power = row.power as number
-					const interval = row.interval as string
+					const interval = row.interval as Date | string
 					if (
 						typeof power !== "number" ||
 						Number.isNaN(power) ||
@@ -100,9 +105,13 @@ async function main() {
 					)
 						continue
 
-					// Convert AEST-naive → UTC ms, round to 5 min
+					// Client returns a UTC Date; older versions returned a
+					// network-local naive string
 					const utcMs = roundTo5Min(
-						new Date(`${interval}Z`).getTime() - 36_000_000,
+						interval instanceof Date
+							? interval.getTime()
+							: new Date(`${interval}Z`).getTime() -
+									(NETWORK_OFFSET_HOURS[network] ?? 10) * 3_600_000,
 					)
 
 					if (!powerByUnit.has(unitCode)) {

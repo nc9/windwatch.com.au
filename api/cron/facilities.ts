@@ -72,8 +72,13 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
 		// Fetch power in batches per network
 		const now = new Date()
-		const toAestNaive = (d: Date) =>
-			new Date(d.getTime() + 36_000_000).toISOString().slice(0, 19)
+		// Query windows are naive datetimes in the network's local time:
+		// NEM is AEST (+10), WEM is AWST (+8)
+		const NETWORK_OFFSET_HOURS: Record<string, number> = { NEM: 10, WEM: 8 }
+		const toNetworkNaive = (d: Date, network: string) =>
+			new Date(d.getTime() + (NETWORK_OFFSET_HOURS[network] ?? 10) * 3_600_000)
+				.toISOString()
+				.slice(0, 19)
 		const oneHourAgo = new Date(now.getTime() - 3_600_000)
 		const latestByUnit = new Map<string, number>()
 
@@ -87,7 +92,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 						network as any,
 						codes.slice(i, i + 20),
 						["power"],
-						{ dateStart: toAestNaive(oneHourAgo), interval: "5m" }
+						{ dateStart: toNetworkNaive(oneHourAgo, network), interval: "5m" }
 					)
 					if (!datatable) {
 						continue
@@ -102,7 +107,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 							latestByUnit.set(row.unit_code as string, power)
 						}
 					}
-				} catch {}
+				} catch (error) {
+					// Don't swallow: a bad query window silently zeroes a whole network
+					console.error(`Power fetch failed for ${network} batch ${i}:`, error)
+				}
 			}
 		}
 
