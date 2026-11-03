@@ -1,9 +1,8 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
-import { useEffect, useMemo, useState } from "react"
+import { lazy, Suspense, useEffect, useMemo, useState } from "react"
 
 import { EnergyMap } from "./components/energy-map"
 import { Legend } from "./components/legend"
-import { ShortcutsModal } from "./components/shortcuts-modal"
 import { StatsPanel } from "./components/stats-panel"
 import { TimeScrubber } from "./components/time-scrubber"
 import { siteConfig } from "./config"
@@ -11,6 +10,12 @@ import { fetchHistory, findClosestSnapshot, mergeSnapshot } from "./lib/history"
 import type { FacilityData, FieldData } from "./lib/types"
 import { readUrlState, writeUrlState } from "./lib/url-state"
 import { useShortcuts } from "./lib/use-shortcuts"
+
+const ShortcutsModal = lazy(() =>
+	import("./components/shortcuts-modal").then((m) => ({
+		default: m.ShortcutsModal,
+	}))
+)
 
 const FACILITIES_URL =
 	import.meta.env.VITE_FACILITIES_URL || siteConfig.facilitiesUrl
@@ -66,7 +71,9 @@ export function App() {
 			fetch(
 				`${FIELD_HISTORY_URL}?type=${siteConfig.mode}&at=${fieldHistoryHour}`
 			).then((r) => {
-				if (!r.ok) {throw new Error(`field history ${r.status}`)}
+				if (!r.ok) {
+					throw new Error(`field history ${r.status}`)
+				}
 				return r.json()
 			}),
 		enabled: !isLive && fieldHistoryHour !== null,
@@ -80,10 +87,13 @@ export function App() {
 
 	// Derive historical facility data from snapshot
 	const historicalFacilities = useMemo<FacilityData | null>(() => {
-		if (isLive || !history.data?.meta || !history.data?.snapshots.length)
-			{return null}
+		if (isLive || !history.data?.meta || !history.data?.snapshots.length) {
+			return null
+		}
 		const snap = findClosestSnapshot(history.data.snapshots, selectedTime!)
-		if (!snap) {return null}
+		if (!snap) {
+			return null
+		}
 		return mergeSnapshot(history.data.meta, snap)
 	}, [isLive, selectedTime, history.data])
 
@@ -126,31 +136,43 @@ export function App() {
 
 	return (
 		<div className="relative h-screen w-screen bg-neutral-950">
-			<EnergyMap facilities={facilities} fieldData={fieldData} />
-			<StatsPanel
-				data={facilities}
-				error={liveFacilities.error ? String(liveFacilities.error) : null}
-				isLive={isLive}
-			/>
-			<Legend />
-			<TimeScrubber
-				earliest={timelineBounds.earliest}
-				latest={timelineBounds.latest}
-				selectedTime={selectedTime}
-				onTimeChange={setSelectedTime}
-				rangeMs={rangeMs}
-				onRangeChange={setRangeMs}
-				isLoading={history.isLoading}
-			/>
-			<button
-				type="button"
-				onClick={() => setHelpOpen(true)}
-				aria-label="Keyboard shortcuts"
-				className="absolute top-4 right-4 z-20 h-8 w-8 rounded-full border border-neutral-700 bg-neutral-950/90 text-sm font-medium text-neutral-300 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-neutral-400"
+			<a
+				href="#main"
+				className="sr-only z-40 rounded bg-neutral-950 px-3 py-2 text-sm text-neutral-100 focus-visible:not-sr-only focus-visible:absolute focus-visible:top-2 focus-visible:left-2 focus-visible:outline-2 focus-visible:outline-neutral-400"
 			>
-				?
-			</button>
-			<ShortcutsModal open={helpOpen} onClose={() => setHelpOpen(false)} />
+				Skip to map
+			</a>
+			<main id="main" className="absolute inset-0">
+				<EnergyMap facilities={facilities} fieldData={fieldData} />
+				<StatsPanel
+					data={facilities}
+					error={liveFacilities.error ? String(liveFacilities.error) : null}
+					isLive={isLive}
+				/>
+				<Legend />
+				<TimeScrubber
+					earliest={timelineBounds.earliest}
+					latest={timelineBounds.latest}
+					selectedTime={selectedTime}
+					onTimeChange={setSelectedTime}
+					rangeMs={rangeMs}
+					onRangeChange={setRangeMs}
+					isLoading={history.isLoading}
+				/>
+				<button
+					type="button"
+					onClick={() => setHelpOpen(true)}
+					aria-label="? keyboard shortcuts"
+					className="absolute top-4 right-4 z-20 h-8 w-8 rounded-full border border-neutral-700 bg-neutral-950/90 text-sm font-medium text-neutral-300 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-neutral-400"
+				>
+					?
+				</button>
+			</main>
+			{helpOpen && (
+				<Suspense fallback={null}>
+					<ShortcutsModal open={helpOpen} onClose={() => setHelpOpen(false)} />
+				</Suspense>
+			)}
 		</div>
 	)
 }
