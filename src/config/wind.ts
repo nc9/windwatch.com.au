@@ -11,5 +11,6 @@ export const windConfig: SiteConfig = {
 	loadingText: "Loading wind data...",
 	mode: "wind",
 	subtitle: "Real-time wind farm generation",
+	documentTitle: "Wind Watch Australia: Live Wind Farm Generation Map",
 	title: "Wind Watch Australia",
 }

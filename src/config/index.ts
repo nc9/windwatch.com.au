@@ -1,6 +1,7 @@
 export interface SiteConfig {
 	mode: "wind" | "solar"
 	title: string
+	documentTitle: string
 	subtitle: string
 	description: string
 	favicon: string

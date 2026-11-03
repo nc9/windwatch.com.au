@@ -11,5 +11,6 @@ export const solarConfig: SiteConfig = {
 	loadingText: "Loading solar data...",
 	mode: "solar",
 	subtitle: "Real-time solar farm generation",
+	documentTitle: "Solar Watch Australia: Live Solar Farm Generation Map",
 	title: "Solar Watch Australia",
 }

@@ -6,7 +6,7 @@ import { siteConfig } from "./config"
 
 import "./styles.css"
 
-document.title = siteConfig.title
+document.title = siteConfig.documentTitle
 
 const queryClient = new QueryClient({
 	defaultOptions: {
